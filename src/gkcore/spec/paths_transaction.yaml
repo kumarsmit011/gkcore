@@ -1,0 +1,27 @@
+
+transaction:
+  get:
+    summary: Get Voucher associated with drcrid
+    parameters:
+      - name: searchby
+        in: query
+        required: true
+        schema:
+          type: string
+      - name: drcrid
+        in: query
+        required: true
+        schema:
+          type: integer
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                searchby:
+                  type: string
+                drcrid:
+                  type: integer

@@ -1,0 +1,318 @@
+delchalListDetails:
+  type: object
+  properties:
+    dcid:
+      type: integer
+    dcno:
+      type: string
+    custname:
+      type: string
+    csflag:
+      type: integer
+    dcdate:
+      type: string
+      format: date
+    attachmentcount:
+      type: integer
+    goname:
+      type: string
+    canceldelchal:
+      type: string
+
+delchalCancelledListDetails:
+  type: object
+  properties:
+    dcid:
+      type: integer
+    dcno:
+      type: string
+    dcdate:
+      type: string
+      format: date
+    dcflag:
+      type: integer
+      enum: [4, 16]
+      description: 4 = sale, 16 = purchase
+    inoutflag:
+      type: integer
+      enum: [9, 15]
+      description: 9 = sale, 15 = purchase
+    custname:
+      type: string
+    goname:
+      type: string
+    srno:
+      type: string
+
+delchal:
+  type: object
+  required: [dcno, dcdate, dcflag, taxstate, inoutflag, delchaltotal, custid, modeoftransport, delchaltotal, totalinword, dateofsupply]
+  properties:
+    custid:
+      type: integer
+      description: id of the customer / supplier to whom the sale/ purchase is made to. Please use /customer api to get the proper customer ids.
+    dcno:
+      type: string
+      description: Delivery Note Number, e.g. 1/DIN-23
+    dcdate:
+      type: string
+      format: date
+      description: Date in which Delivery Note is created
+    dcflag:
+      type: integer
+      enum: [4, 16]
+      description: 4 = sale, 16 = purchase. Flag that denotes if a Delivery Note is created for a sale / purchase.
+    taxstate:
+      type: string
+      description: If sale, state of customer. If Purchase state of the organisation. e.g. Karnataka
+    orgstategstin:
+      type: string
+      description: GSTIN of the organisation, e.g. 36AALCA1638A1Z2
+    discflag:
+      type: integer
+      enum: [1, 16]
+      description: discount flag, 1 - amount, 16 - percent. Please use 1 for testing
+    dcnarration:
+      type: string
+      description: Comments for the Delivery Note created. Can be any string
+    roundoffflag:
+      type: integer
+      enum: [0, 1]
+      description: 0 = true, 1 = false. Denotes if the delivery note total is rounded off or not.
+    consignee:
+      type: object
+      properties:
+        consigneename:
+          type: string
+        tinconsignee:
+          type: string
+        gstinconsignee:
+          type: string
+        consigneeaddress:
+          type: string
+        consigneestate:
+          type: string
+        consigneestatecode:
+          anyOf:
+            - type: string
+              description: use /state api to fetch the valid state codes
+            - type: integer
+              description: use /state api to fetch the valid state codes
+        consigneepincode:
+          type: string
+    issuername:
+      type: string
+      description: Name of the user creating the Delivery Note
+    designation:
+      type: string
+    vehicleno:
+      type: number
+    modeoftransport:
+      type: string
+    noofpackages:
+      type: integer
+    sourcestate:
+      type: string
+      description: If sale, state of organisation. If Purchase state of the customer. e.g. Karnataka 
+    inoutflag:
+      type: integer
+      enum: [9, 15]
+      description: 9 = sale, 15 = purchase
+    taxflag:
+      type: integer
+      enum: [7, 22]
+      description: 7 = GST, 22 = VAT
+    delchaltotal:
+      type: string
+      example: "750.65"
+    totalinword:
+      type: string
+      example: Seven Hundred Fifty Rupees and Sixty Five Paise
+    contents:
+      type: object
+    tax:
+      type: object
+      description: Keys are product id, values are product tax rate
+    cess:
+      type: object
+      description: Keys are product id, values are product cess rate
+    freeqty:
+      type: object
+      description: Keys are product id, values are product free qty
+    discount:
+      type: object
+      description: Keys are product id, values are product discount rates
+    dateofsupply:
+      type: string
+      format: date
+
+stock:
+  type: object
+  required: [inout, goid]
+  properties:
+    inout:
+      type: integer
+      enum: [9, 15]
+      description: 9 = sale, 15 = purchase
+    goid:
+      type: integer
+      description: godown id
+    
+
+delchalSingleDetails:
+  type: object
+  properties:
+    dcid:
+      type: integer
+    dcno:
+      type: string
+    dcflag:
+      type: integer
+      enum: [4, 16]
+      description: 4 = sale, 16 = purchase
+    issuername:
+      type: string
+    designation:
+      type: string
+    orggstin:
+      type: string
+    dcdate:
+      type: string
+      format: date
+    taxflag:
+      type: integer
+      enum: [7, 22]
+      description: 7 = GST, 22 = VAT
+    cancelflag:
+      type: integer
+    noofpackages:
+      type: string
+    modeoftransport:
+      type: string
+    vehicleno:
+      type: string
+    attachmentcount:
+      type: integer
+    inoutflag:
+      type: integer
+      enum: [9, 15]
+      description: 9 = sale, 15 = purchase
+    inout:
+      type: object
+    dcnarration:
+      type: string
+    roundoffflag:
+      type: integer
+      enum: [0, 1]
+      description: 0 = true, 1 = false
+    totalinword:
+      type: string
+    delchaldata:
+      type: object
+      properties:
+        consignee:
+          type: string
+        delchaltotal:
+          type: string
+        roundedoffvalue:
+          type: string
+        canceldate:
+          type: string
+        goid:
+          type: string
+        goname:
+          type: string
+        gostate:
+          type: string
+        goaddr:
+          type: string
+    destinationstate:
+      type: string
+    taxstatecode:
+      type: integer
+    sourcestate:
+      type: string
+    sourcestatecode:
+      type: integer
+    dateofsupply:
+      type: string
+      format: date
+    custSupDetails:
+      type: object
+      properties:
+        custname:
+          type: string
+        custsupstate:
+          type: string
+        custaddr:
+          type: string
+        csflag:
+          type: integer
+        pincode:
+          type: string
+        custsupstatecode:
+          type: integer
+    delchalflag:
+      type: integer
+      enum: [14, 15]
+      description: 14 - new delivery notes, 15 - old delivery notes
+    stockdata:
+      type: array
+      items:
+        type: object
+        additionalProperties:
+          type: object
+          properties:
+            qty:
+              type: number
+            productdesc:
+              type: string
+            unitname:
+              type: string
+    totaldiscount:
+      type: number
+    totaltaxablevalue:
+      type: number
+    totaltaxamt:
+      type: number
+    totalcessamt:
+      type: number
+    taxname:
+      type: string
+    delchalContents:
+      type: object
+      additionalProperties:
+        type: object
+        properties:
+          proddesc:
+            type: string
+          gscode:
+            type: integer
+          uom:
+            type: string
+          qty:
+            type: number
+          freeqty:
+            type: number
+          priceperunit:
+            type: number
+          discount:
+            type: number
+          taxableamount:
+            type: number
+          totalAmount:
+            type: number
+          taxname:
+            type: string
+          taxrate:
+            type: number
+          taxamount:
+            type: number
+          cess:
+            type: number
+          cessrate:
+            type: number
+    discflag:
+      type: integer
+      enum: [1, 16]
+      description: discount flag, 1 - amount, 16 - percent

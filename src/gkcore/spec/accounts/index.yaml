@@ -1,0 +1,75 @@
+get:
+  tags: ["Accounts"]
+  summary: List of accounts
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              gkstatus:
+                type: integer
+              gkresult:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    srno:
+                      type: integer
+                    accountcode:
+                      type: integer
+                    accountname:
+                      type: string
+                    openingbal:
+                      type: string
+                    groupcode:
+                      type: integer
+                    groupname:
+                      type: string
+                    subgroupcode:
+                      type: string
+                    subgroupname:
+                      type: string
+                    sysaccount:
+                      type: integer
+                    defaultflag:
+                      type: string
+
+post:
+  tags: ["Accounts"]
+  summary: create an account.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            origin:
+              type: string
+            gkdata:
+              type: object
+              properties:
+                accountname:
+                  type: string
+                defaultflag:
+                  type: integer
+                groupcode:
+                  type: integer
+                openingbal:
+                  type: string
+              required:
+                - accountname
+                - openingbal
+                - groupcode
+  responses:
+    200:
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              gkstatus:
+                type: integer

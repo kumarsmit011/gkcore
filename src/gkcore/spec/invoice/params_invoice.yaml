@@ -1,0 +1,6 @@
+invid:
+  in: path
+  name: invid
+  schema:
+    type: integer
+  required: true

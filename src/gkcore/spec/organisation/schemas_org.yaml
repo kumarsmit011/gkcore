@@ -1,0 +1,96 @@
+orgDetails:
+  type: object
+  additionalProperties: false
+  required: [orgname, orgtype, yearstart, yearend, orgstate]
+  properties:
+    orgname:
+      type: string
+    orgtype:
+      type: string
+      enum: [For Profit, Not For Profit]
+    yearstart:
+      type: string
+      format: date
+    yearend:
+      type: string
+      format: date
+    orgstate:
+      type: string
+    orgcity:
+      type: string
+    orgaddr:
+      type: string
+    orgpincode:
+      type: number
+    orgcountry:
+      type: string
+    orgtelno:
+      type: string
+    orgfax:
+      type: string
+    orgwebsite:
+      type: string
+    orgemail:
+      type: string
+    orgpan:
+      type: string
+    orgmvat:
+      type: string
+    orgstax:
+      type: string
+    orgregno:
+      type: string
+    orgregdate:
+      type: string
+    orgfcrano:
+      type: string
+    orgfcradate:
+      type: string
+    invflag:
+      type: integer
+      default: 0
+      example: Note - use 1 for testing
+    invsflag:
+      type: integer
+      default: 1
+      example: Note - use 1 for testing
+    billflag:
+      type: integer
+      default: 1
+      example: Note - use 1 for testing
+    avflag:
+      type: integer
+      default: 1
+      example: Note - use 1 for testing
+    maflag:
+      type: integer
+      default: 1
+      example: Note - use 0 for testing
+    avnoflag:
+      type: integer
+      default: 0
+      example: Note - use 1 for testing
+    ainvnoflag:
+      type: integer
+      default: 0
+      example: Note - use 1 for testing
+    modeflag:
+      type: integer
+      default: 1
+      example: Note - use null for testing
+    orgconf:
+      type: object
+      default: {}
+    roflag:
+      type: integer
+      default: 0
+      example: Note - use null for testing
+    booksclosedflag:
+      type: integer
+    logo:
+      type: string
+      format: byte
+
+orgType:
+  type: string
+  enum: [For Profit, Not For Profit]

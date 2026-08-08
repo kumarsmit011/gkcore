@@ -1,0 +1,16 @@
+dcid:
+  in: path
+  name: dcid
+  required: true
+  description: Id of delivery note
+  schema:
+    type: integer
+  
+inoutflag:
+  in: query
+  name: inoutflag
+  required: true
+  description: 9 = sale, 15 = purchase
+  schema:
+    type: integer
+    enum: [9, 15]

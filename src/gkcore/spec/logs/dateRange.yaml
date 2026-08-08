@@ -1,0 +1,24 @@
+get:
+  tags: ["Logs"]
+  summary: Get Organisation logs in given date range
+  parameters:
+    - in: query
+      name: from
+      required: true
+      schema:
+        $ref: "./templates.yaml#/components/schemas/date"
+      description: "yyyy-mm-dd"
+
+    - in: query
+      name: to
+      required: true
+      schema:
+        $ref: "./templates.yaml#/components/schemas/date"
+      description: "yyyy-mm-dd"
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "./templates.yaml#/components/schemas/logArray"

@@ -1,0 +1,460 @@
+invoice:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch all invoices of the given type belonging to an organisation
+    operationId: getAllinvoices
+    parameters:
+      - in: query
+        name: inv
+        required: true
+        schema:
+          type: string
+          enum: ["all", "alldeleted"]
+      - in: query
+        name: type
+        required: true
+        schema:
+          type: string
+          enum: ["sale", "purchase"]
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: "./invoice/schemas_invoice.yaml#/basicInvoiceDetails"
+                      - $ref: "./invoice/schemas_invoice.yaml#/allInvoiceDetails"
+  post:
+    tags: ["Invoice"]
+    summary: Create new invoice
+    operationId: addInvoice
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  delchalPayload:
+                    $ref: "./invoice/schemas_invoice.yaml#/delchalPayload"
+              - type: object
+                properties:
+                  payload:
+                    $ref: "./invoice/schemas_invoice.yaml#/payload"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: integer
+                  description: id of the invoice created will be returned on success
+                vchData:
+                  type: object
+                  properties:
+                    status:
+                      type: integer
+                      enum: [0, 1]
+                    vchno:
+                      type: string
+                    vchid:
+                      type: integer
+invoice_invid:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch invoice details
+    operationId: getInvoiceDetails
+    parameters:
+      - in: path
+        name: invid
+        required: true
+        schema:
+          type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  $ref: "./invoice/schemas_invoice.yaml#/singleInvoiceDetails"
+  put:
+    tags: ["Invoice"]
+    summary: Edit an invoice's data
+    operationId: editInvoice
+    parameters:
+      - $ref: "./invoice/params_invoice.yaml#/invid"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  delchalPayload:
+                    $ref: "./invoice/schemas_invoice.yaml#/delchalPayload"
+              - type: object
+                properties:
+                  payload:
+                    $ref: "./invoice/schemas_invoice.yaml#/payload"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                vchData:
+                  type: object
+                  properties:
+                    status:
+                      type: integer
+                    vchid:
+                      type: integer
+                    vchno:
+                      type: string
+  # WARNING: this api is disabled as it causes inconsistencies in accounting logic
+  #
+  # delete:
+  #   tags: ["Invoice"]
+  #   summary: Delete an invoice
+  #   operationId: deleteinvoice
+  #   parameters:
+  #     - $ref: "./invoice/params_invoice.yaml#/invid"
+  #   responses:
+  #     200:
+  #       description: ok
+  #       content:
+  #         application/json:
+  #           schema:
+  #             type: object
+  #             required: [gkstatus]
+  #             properties:
+  #               gkstatus:
+  #                 $ref: "./global/schemas.yaml#/gkstatus"
+
+invoice_cancel:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch cancelled invoice details
+    operationId: getCancelledInvoiceDetails
+    parameters:
+      - in: path
+        name: invid
+        required: true
+        schema:
+          type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  $ref: "./invoice/schemas_invoice.yaml#/singleInvoiceDetails"
+  delete:
+    tags: ["Invoice"]
+    summary: Cancel an invoice
+    operationId: cancelInvoice
+    parameters:
+      - $ref: "./invoice/params_invoice.yaml#/invid"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+invoice_id:
+  get:
+    tags: ["Invoice"]
+    summary: Get the id of the next invoice to be generated. Used for auto invno generation
+    operationId: getinvid
+    parameters:
+      - in: query
+        name: type
+        required: true
+        schema:
+          type: integer
+          enum: [9, 15]
+          description: 9 = purchase, 15 = sale
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                invoiceid:
+                  type: integer
+
+invoice_list:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch a list of invoices of given type belonging to an organisation
+    operationId: getListofInvoices
+    parameters:
+      - in: query
+        name: type
+        required: true
+        schema:
+          type: string
+          enum: ["list", "listdeleted"]
+      - in: query
+        name: orderflag
+        required: true
+        schema:
+          type: integer
+          enum: [0, 1]
+      - in: query
+        name: todate
+        required: true
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: fromdate
+        required: true
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: flag
+        required: true
+        schema:
+          type: string
+          enum: ["0", "1", "2"]
+        description: 0 = all, 1 = sales, 2 = purchases
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: "./invoice/schemas_invoice.yaml#/basicInvoiceDetails"
+                      - $ref: "./invoice/schemas_invoice.yaml#/invoiceListDetails"
+
+invoice_list_rectify:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch list of invoices which can be rectified
+    operationId: getListofInvoices_rectify
+    parameters:
+      - in: query
+        name: invtype
+        required: true
+        schema:
+          type: integer
+          enum: [9, 15]
+          description: 9 = sale, 15 = purchase
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: "./invoice/schemas_invoice.yaml#/basicInvoiceDetails"
+                      - $ref: "./invoice/schemas_invoice.yaml#/invoiceRectifyListDetails"
+
+invoice_nonrejected:
+  get:
+    tags: ["Invoice"]
+    summary: Fetches all invoices that are not fully rejected yet. It is used in rejection note, to prepare rejection note against these invoices
+    operationId: nonRejected
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: "./invoice/schemas_invoice.yaml#/basicInvoiceDetails"
+                      - type: object
+                        properties:
+                          inoutflag:
+                            type: integer
+                            enum: [9, 15]
+                            description: 9 = sale, 15 = purchase
+                          rejcontent:
+                            type: string
+                          custsupdetail:
+                            type: object
+                            properties:
+                              custname:
+                                type: string
+                              custaddr:
+                                type: string
+                              csflag:
+                                type: integer
+                                enum: [3, 19]
+                                description: 3 = customer, 19 = supplier
+                              custtin:
+                                type: string
+                              custstate:
+                                type: string
+                              custgstin:
+                                type: string
+
+invoice_attachment:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch attachment of an invoice
+    operationId: getInvoiceAttachment
+    parameters:
+      - $ref: "./invoice/params_invoice.yaml#/invid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: string
+                  format: byte
+                invoiceno:
+                  type: string
+                userrole:
+                  type: integer
+                  enum: [-1, 0, 1, 2, 3]
+                  description: -1 = admin, 0 = manager, 1 = operator, 2 = auditor, 3 = godown incharge
+
+cashmemo:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch all CashMemo of the given type belonging to an organisation
+    operationId: getAllcashmemos
+    parameters:
+      - in: query
+        name: inoutflag
+        schema:
+          type: integer
+          enum: [15]
+          description: 15 = purchase
+        required: true
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    allOf:
+                      - $ref: "./invoice/schemas_invoice.yaml#/basicInvoiceDetails"
+                      - type: object
+                        properties:
+                          invoicetotal:
+                            type: number
+
+invoice_crdrid:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch credit/debit note id details
+    operationId: getcrdrid
+    parameters:
+      - $ref: "./invoice/params_invoice.yaml#/invid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+invoice_rnid:
+  get:
+    tags: ["Invoice"]
+    summary: Fetch rejection note id details
+    operationId: getrnid
+    parameters:
+      - $ref: "./invoice/params_invoice.yaml#/invid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"

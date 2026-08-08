@@ -1,0 +1,36 @@
+get:
+  tags: ["Accounts"]
+  summary: Get accounts as spreadsheet
+  parameters:
+    - in: query
+      name: fystart
+      required: true
+      description: "dd-mm-yyyy"
+      schema:
+        type: string
+
+    - in: query
+      name: fyend
+      required: true
+      description: "dd-mm-yyyy"
+      schema:
+        type: string
+    - in: query
+      name: orgname
+      required: true
+      description: "name of the organisation"
+      schema:
+        type: string
+    - in: query
+      name: orgtype
+      required: true
+      description: "Type of organisation"
+      schema:
+        type: string
+  responses:
+    "200":
+      description: Response with .xlsx file payload
+      content:
+        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+          schema:
+            format: binary

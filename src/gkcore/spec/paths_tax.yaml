@@ -1,0 +1,145 @@
+tax:
+  get:
+    tags: ["Tax"]
+    summary: Fetch all existing data about taxes for current organisation
+    operationId: getAllTax
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    allOf:
+                    - type: object
+                      properties:
+                        taxid:
+                          type: integer
+                    - $ref: "./tax/schemas_tax.yaml#/taxDetails"
+
+  post:
+    tags: ["Tax"]
+    summary: Create a new tax entry for a product
+    description: The tax must be created against a product, So create a product first if not already created & pass the `productcode` in this body
+    operationId: addtax
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "./tax/schemas_tax.yaml#/taxDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+tax_search:
+  get:
+    tags: ["Tax"]
+    summary: Fetch list of taxes for a product or a category
+    operationId: getprodtax
+    parameters:
+      - in: path
+        name: pscflag
+        schema:
+          type: string
+          enum: ['p', 's', 'c', 'i']
+          description: p = all the taxes for that product, s = for that product for that state, c = for that category, i = a combo of the before three 
+        required: true
+      - in: query
+        name: state
+        schema:
+          type: string
+        required: true
+      - in: query
+        name: productcode
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: categorycode
+        schema:
+          type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    $ref: "./product/schemas_product.yaml#/productListDetails"
+
+tax_taxid:
+  put:
+    tags: ["Tax"]
+    summary: Edit a tax item's data
+    operationId: edittaxdata
+    parameters:
+      - in: path
+        name: taxid
+        schema:
+          type: integer
+        required: true
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  taxid:
+                    type: integer
+              - $ref: "./tax/schemas_tax.yaml#/taxDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+  delete:
+    tags: ["Tax"]
+    summary: Delete a tax item
+    operationId: deletetaxdata
+    parameters:
+      - in: path
+        name: taxid
+        schema:
+          type: integer
+        required: true
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"

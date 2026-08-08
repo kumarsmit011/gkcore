@@ -1,0 +1,8 @@
+custid:
+  in: path
+  name: custid
+  required: true
+  schema:
+    type: integer
+    minimum: 1
+  description: The customer / supplier ID

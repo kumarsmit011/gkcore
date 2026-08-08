@@ -1,0 +1,117 @@
+invite:
+  post:
+    tags: ["Invite"]
+    summary: Invite a user to an organisation
+    operationId: createInvite
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [username, userrole]
+            properties:
+              username:
+                type: string
+              userrole:
+                $ref: "./global/schemas.yaml#/userrole"
+              golist:
+                type: array
+                description: A list of godown ids. Used for role - Godown In Charge (3)
+                items:
+                  type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+  delete:
+    tags: ["Invite"]
+    summary: Delete a user's invite to an organisation
+    operationId: deleteInvite
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [userid]
+            properties:
+              userid:
+                type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+invite_accept:
+  post:
+    tags: ["Invite"]
+    summary: Accept an invite for a user in an org
+    operationId: acceptInvite
+    security:
+      - UserAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [orgcode]
+            properties:
+              orgcode:
+                type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+invite_reject:
+  post:
+    tags: ["Invite"]
+    summary: Reject an invite for a user in an org
+    operationId: rejectInvite
+    security:
+      - UserAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            additionalProperties: false
+            required: [orgcode]
+            properties:
+              orgcode:
+                type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"

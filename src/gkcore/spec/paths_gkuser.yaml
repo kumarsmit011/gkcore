@@ -1,0 +1,259 @@
+gkuser:
+  post:
+    tags: ["Gkuser"] # "User",
+    summary: Create a new user
+    operationId: addUser
+    security: [{}]
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "./gkuser/schemas_gkuser.yaml#/userDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                token:
+                  $ref: "./global/schemas.yaml#/token"
+                  description: JWT token used to authenticate a user in GNUKhata
+
+  put:
+    tags: ["Gkuser"] # "User",
+    summary: Edit a user's data
+    # operationId: putUser
+    parameters:
+      - in: query
+        name: type
+        schema:
+          type: string
+        description: Specifies the type of edit required
+        required: true
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "./gkuser/schemas_gkuser.yaml#/userDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+  delete:
+    tags: ["Gkuser"] # "User",
+    summary: Delete user
+    security:
+      - UserAuth: []
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+organisation_gkusers:
+  get:
+    tags: ["Gkuser"] # "User", , "Users of an Organisation"
+    summary: Fetch all users belonging to an organisation
+    operationId: getAllUserData
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    $ref: "./gkuser/schemas_gkuser.yaml#/userMetaData"
+
+gkuser_orgs:
+  get:
+    tags: ["Gkuser"] # "User", , "Organisations of an user"
+    summary: Fetch all organisations that a user is part of
+    operationId: getAllUserOrgs
+    security:
+      - UserAuth: []
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    $ref: "./gkuser/schemas_gkuser.yaml#/orgMetaData"
+
+gkuser_pwd_question:
+  get:
+    tags: ["Gkuser"] # "User",
+    summary: Fetch password recovery question
+    operationId: getquestion
+    security: [{}]
+    parameters:
+      - in: query
+        name: username
+        schema:
+          type: string
+        required: true
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    userquestion:
+                      type: string
+                    userid:
+                      type: integer
+
+gkuser_pwd_answer:
+  get:
+    tags: ["Gkuser"] # "User",
+    summary: Verify password recovery question's answer
+    operationId: verifyanswer
+    security: [{}]
+    parameters:
+      - in: query
+        name: userid
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: useranswer
+        schema:
+          type: string
+        required: true
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+gkuser_pwd_reset:
+  put:
+    tags: ["Gkuser"] # "User",
+    summary: Reset the password of a user
+    operationId: resetpassword
+    security: [{}]
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [userid, useranswer, userpassword]
+            additionalProperties: false
+            properties:
+              userid:
+                type: string
+              useranswer:
+                type: string
+              userpassword:
+                type: string
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+gkuser_pwd_change:
+  put:
+    tags: ["Gkuser"] # "User",
+    summary: Change the password of a user
+    security:
+      - UserAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [userpassword]
+            additionalProperties: false
+            properties:
+              userpassword:
+                type: string
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+gkuser_username:
+  get:
+    tags: ["Gkuser"] # "User",
+    summary: Check if an user's name is unique
+    operationId: checkUserNameUnique
+    security: [{}]
+    parameters:
+      - in: path
+        name: username
+        schema:
+          type: string
+        required: true
+        description: User name to be checked if unique
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: boolean

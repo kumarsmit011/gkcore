@@ -1,0 +1,97 @@
+GSTR-3B:
+  get:
+    tags: ["GST"]
+    summary: GSTR-3B report
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    json:
+                      type: object
+                    invoice:
+                      type: object
+                      properties:
+                        outward_taxable_supplies:
+                          type: array
+                        outward_taxable_zero_rated:
+                          type: array
+                        outward_taxable_exempted:
+                          type: array
+                        outward_non_gst:
+                          type: array
+                        inward_reverse_charge:
+                          type: array
+                        import_goods:
+                          type: array
+                        import_service:
+                          type: array
+                        inward_isd:
+                          type: array
+                        all_itc:
+                          type: array
+                        net_itc:
+                          type: array
+                        itc_reversed_1:
+                          type: array
+                        itc_reversed_2:
+                          type: array
+                        ineligible_1:
+                          type: array
+                        ineligible_2:
+                          type: array
+                        inward_zero_gst:
+                          type: array
+                        non_gst:
+                          type: array
+                        interest:
+                          type: array
+                        pos_unre_comp_uin_igst:
+                          type: object
+                          properties:
+                            unreg:
+                              type: object
+                            compos:
+                              type: object
+                            uin:
+                              type: object
+
+GSTR-1:
+  get:
+    tags: ["GST"]
+    summary: GSTR-1 report
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkdata:
+                  type: object
+                  properties:
+                    b2b:
+                      type: array
+                    b2cl:
+                      type: array
+                    b2cs:
+                      type: array
+                    cdnr:
+                      type: array
+                    cdnur:
+                      type: array
+                    hsn1:
+                      type: array
+                json:
+                  type: object

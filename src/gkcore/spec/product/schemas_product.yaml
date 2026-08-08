@@ -1,0 +1,119 @@
+# used when sending a list of products from the server
+productListDetails:
+  type: object
+  additionalProperties: false
+  properties:
+    srno:
+      type: integer
+    unitname:
+      type: string
+    categoryname:
+      type: string
+    productcode:
+      type: integer
+    productdesc:
+      type: string
+    categorycode:
+      type: integer
+    productquantity:
+      type: integer
+    gsflag:
+      type: integer
+      enum: [7, 19]
+      description: 7 = product, 19 = service
+
+productDetails:
+  type: object
+  additionalProperties: false
+  properties:
+    discountpercent:
+      type: number
+    discountamount:
+      type: number
+    productcode:
+      type: integer
+    productdesc:
+      type: string
+    gsflag:
+      $ref: "#/gsflag"
+    gscode:
+      type: integer
+    deletable:
+      type: string
+    prodsp:
+      type: number
+    prodmrp:
+      type: number
+    specs:
+      type: string
+    categorycode:
+      type: integer
+    uomid:
+      type: integer
+    unitname:
+      type: string
+    openingstock:
+      type: number
+
+# used for creating and editing a product
+productInDetails:
+  type: object
+  properties:
+    productdesc:
+      type: string
+      description: Product name
+    prodmrp:
+      type: number
+      description: Product Maximum Retail Price
+    prodsp:
+      type: number
+      description: Product Selling Price
+    amountdiscount:
+      type: number
+      description: Discount in Rupees
+    percentdiscount:
+      type: number
+      description: Discount in percentage (% symbol not required, just floating number)
+    gscode:
+      type: string
+      description: HSN code
+    gsflag:
+      $ref: "#/gsflag"
+    openingstock:
+      type: number
+      description: legacy property, use godowndetails to store opening stock godownwise
+    uomid:
+      type: integer
+      description: unit of measurement id, please use /unitofmeasurement?qty=all to get a list of all UOMs and their ids
+    categorycode:
+      type: integer
+      description: please use GET /categories to get a list of all categories and their ids, if no categories present use null
+
+godownDetails:
+  type: object
+  additionalProperties:
+    type: object
+    description: Keys are godown ids
+    properties:
+      qty:
+        type: number
+      rate:
+        type: number
+  example: { 1: { qty: 1, rate: 5 }, 2: { qty: 2.5, rate: 6.12 } }
+
+# used for creating and editing a product
+productPayload:
+  type: object
+  required: [productdetails, godownflag]
+  properties:
+    productdetails:
+      $ref: "#/productInDetails"
+    godetails:
+      $ref: "#/godownDetails"
+    godownflag:
+      type: boolean
+
+gsflag:
+  type: integer
+  enum: [7, 19]
+  description: 7 = product, 19 = service

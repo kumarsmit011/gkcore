@@ -1,0 +1,8 @@
+productcode:
+  in: path
+  name: productcode
+  required: true
+  schema:
+    type: integer
+    minimum: 1
+  description: The product ID

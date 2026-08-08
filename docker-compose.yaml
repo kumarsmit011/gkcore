@@ -1,0 +1,36 @@
+# Docker compose file for gkcore local development
+
+services:
+  # Postgresql 12 image
+  db:
+    image: postgres:12-alpine
+    environment:
+      - POSTGRES_USER=${GKCORE_DB_USER:-gkadmin}
+      - POSTGRES_PASSWORD=${GKCORE_DB_PASSWORD:-gkadmin}
+      - POSTGRES_DB=${GKCORE_DB_NAME:-gkdata}
+    ports:
+      - "${DB_HOST_PORT:-5432}:5432"
+    volumes:
+      - gkdb:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "sh -c 'pg_isready -U ${GKCORE_DB_USER:-gkadmin} -d ${GKCORE_DB_NAME:-gkdata}'"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  # REST API Server
+  gkcore:
+    build: .
+    restart: "always"
+    environment:
+      - GKCORE_DB_HOST=db
+      - GKCORE_DB_PORT=5432
+      - ENVIRONMENT=${ENVIRONMENT:-production}
+    ports:
+      - "6543:6543"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  gkdb:

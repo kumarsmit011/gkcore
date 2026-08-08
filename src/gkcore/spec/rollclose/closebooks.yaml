@@ -1,0 +1,21 @@
+get:
+  tags: ["Close Books / Roll Over"]
+  summary: Close the organisation's books
+  parameters:
+    - in: query
+      name: financialend
+      required: true
+      description: "yyyy-mm-dd"
+      schema:
+        type: string
+        format: date
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              gkstatus:
+                type: integer

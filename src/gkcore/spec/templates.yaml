@@ -1,0 +1,30 @@
+components:
+  # securitySchemes:
+  #   ApiKeyAuth:
+  #     type: apiKey
+  #     in: header
+  #     name: gktoken
+  schemas:
+    date:
+      type: string
+      format: date
+    logArray:
+      type: object
+      properties:
+        gkstatus:
+          type: integer
+        gkresult:
+          type: array
+          items:
+            type: object
+            properties:
+              logid:
+                type: integer
+              time:
+                type: string
+              activity:
+                type: string
+              userid:
+                type: integer
+              username:
+                type: string

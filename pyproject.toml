@@ -1,0 +1,42 @@
+[tool.poetry]
+name = "gkcore"
+version = "8.0"
+description = "GNUKhata's REST API server"
+authors = ["GNUKhata Contributors"]
+license = "AGPLv3"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = ">=3.10,<4"
+pyramid = "2.0"
+sqlalchemy = "1.3.20"
+monthdelta = "0.9.1"
+pyjwt = "1.7.1"
+natsort = "7.1.0"
+wsgicors = "0.7.0"
+pycryptodome = "3.15.0"
+waitress = "3.0.0"
+gunicorn = "20.1.0"
+openpyxl = "3.0.10"
+
+# for api payload validation
+pydantic = "2.8.2"
+pydantic-core = "2.20.1"
+pydantic-extra-types = "2.9.0"
+phonenumbers = "^8.13.44"
+email-validator = "^2.2.0"
+
+# Python Dotenv: To read environment variables from .env file
+python-dotenv = "1.0.1"
+pyramid-openapi3 = "^0.19.1"
+psycopg2 = "^2.9.10"
+bcrypt = "^4.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+gkserve = "gkcore.scripts.serve:main"
+gkdb = "gkcore.scripts.gkdb:main"
+gkauth = "gkcore.scripts.gkauth:main"

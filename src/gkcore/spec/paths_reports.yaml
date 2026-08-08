@@ -1,0 +1,531 @@
+ledger_drcr:
+  get:
+    tags: ["Reports"]
+    summary: Filter ledger by Debit/Credit Entries
+    parameters:
+      - $ref: "./global/params.yaml#/accountcode"
+      - $ref: "./global/params.yaml#/projectcode"
+      - in: query
+        name: financialstart
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "Financial year starting date (YYYY-MM-DD)"
+
+      - $ref: "./global/params.yaml#/calculatefrom"
+      - $ref: "./global/params.yaml#/calculateto"
+      - in: query
+        name: side
+        required: true
+        schema:
+          type: string
+          enum: ["cr", "dr"]
+        description: cr - Credit Only, dr - Debit Only
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  $ref: "./global/schemas.yaml#/ledger_gkresult"
+                userrole:
+                  $ref: "./global/schemas.yaml#/userrole"
+                ledgerheader:
+                  type: object
+                  properties:
+                    accountname:
+                      type: string
+                    projectname:
+                      type: string
+                    calculateto:
+                      type: string
+                    calculatefrom:
+                      type: string
+
+ledger:
+  get:
+    tags: ["Reports"]
+    summary: Ledger
+    parameters:
+      - $ref: "./global/params.yaml#/accountcode"
+      - $ref: "./global/params.yaml#/projectcode"
+      - in: query
+        name: financialstart
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "Financial year starting date (YYYY-MM-DD)"
+
+      - $ref: "./global/params.yaml#/calculatefrom"
+      - $ref: "./global/params.yaml#/calculateto"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  $ref: "./global/schemas.yaml#/ledger_gkresult"
+                userrole:
+                  $ref: "./global/schemas.yaml#/userrole"
+                ledgerheader:
+                  type: object
+                  properties:
+                    accountname:
+                      type: string
+                    projectname:
+                      type: string
+                    calculateto:
+                      type: string
+                    calculatefrom:
+                      type: string
+
+ledger_monthly:
+  get:
+    tags: ["Reports"]
+    summary: Monthly Ledger
+    parameters:
+      - $ref: "./global/params.yaml#/accountcode"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      month:
+                        type: string
+                      Dr:
+                        type: string
+                      Cr:
+                        type: string
+                      period:
+                        type: string
+                      vcount:
+                        type: integer
+                      vcountDr:
+                        type: integer
+                      vcountCr:
+                        type: integer
+                      vcountLock:
+                        type: integer
+                      advflag:
+                        type: integer
+                accountcode:
+                  type: string
+                accountname:
+                  type: string
+
+ext_trial_balance:
+  get:
+    tags: ["Reports"]
+    summary: Extended Trial Balance
+    parameters:
+      - $ref: "./global/params.yaml#/calculatefrom"
+      - $ref: "./global/params.yaml#/calculateto"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      accountcode:
+                        type: integer
+                      accountname:
+                        type: string
+                      groupname:
+                        type: string
+                      totaldr:
+                        type: string
+                      totalcr:
+                        type: string
+                      srno:
+                        type: integer
+                      openingbalance:
+                        type: string
+                      curbaldr:
+                        type: string
+                      curbalcr:
+                        type: string
+                      ttlRunDr:
+                        type: string
+                      ttlRunCr:
+                        type: string
+                      advflag:
+                        type: integer
+
+net_trial_balance:
+  get:
+    tags: ["Reports"]
+    summary: Net Trial Balance
+    parameters:
+      - $ref: "./global/params.yaml#/calculatefrom"
+      - $ref: "./global/params.yaml#/calculateto"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      accountcode:
+                        type: integer
+                      accountname:
+                        type: string
+                      groupname:
+                        type: string
+                      srno:
+                        type: integer
+                      Dr:
+                        type: string
+                      Cr:
+                        type: string
+                      advflag:
+                        type: integer
+                      ttlRunDr:
+                        type: string
+                      ttlRunCr:
+                        type: string
+
+gross_trial_balance:
+  get:
+    tags: ["Reports"]
+    summary: Gross Trial Balance
+    parameters:
+      - $ref: "./global/params.yaml#/calculatefrom"
+      - $ref: "./global/params.yaml#/calculateto"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      accountcode:
+                        type: integer
+                      accountname:
+                        type: string
+                      groupname:
+                        type: string
+                      Dr balance:
+                        type: string
+                      Cr balance:
+                        type: string
+                      srno:
+                        type: integer
+                      advflag:
+                        type: integer
+                      ttlRunDr:
+                        type: string
+                      ttlRunCr:
+                        type: string
+
+balance_sheet:
+  get:
+    tags: ["Reports"]
+    summary: Balance sheet
+    parameters:
+      - in: query
+        name: calculatefrom
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "YYYY-MM-DD"
+      - in: query
+        name: calculateto
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "YYYY-MM-DD"
+      - in: query
+        name: baltype
+        required: true
+        schema:
+          type: integer
+          enum: [1]
+        description: balance type
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    leftlist:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          groupAccname:
+                            type: string
+                          amount:
+                            type: string
+                          groupAcccode:
+                            type: string
+                          subgroupof:
+                            type: string
+                          accountof:
+                            type: string
+                          groupAccflag:
+                            type: string
+                          advflag:
+                            type: string
+                    rightlist:
+                      type: array
+                      items:
+                        type: object
+                        properties:
+                          groupAccname:
+                            type: string
+                          amount:
+                            type: string
+                          groupAcccode:
+                            type: string
+                          subgroupof:
+                            type: string
+                          accountof:
+                            type: string
+                          groupAccflag:
+                            type: string
+                          advflag:
+                            type: string
+
+profit_loss:
+  get:
+    tags: ["Reports"]
+    summary: Profit loss report
+    parameters:
+      - $ref: "./global/params.yaml#/calculatefrom"
+      - $ref: "./global/params.yaml#/calculateto"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    Closing Stock:
+                      type: object
+                    Opening Stock:
+                      type: object
+                    Direct Expense:
+                      type: object
+                    Direct Income:
+                      type: object
+                    grossprofitcf:
+                      type: string
+                    totalD:
+                      type: string
+                    Indirect Expense:
+                      type: object
+                    Indirect Income:
+                      type: object
+                    netprofit:
+                      type: string
+                    Total:
+                      type: string
+
+view_registers:
+  get:
+    tags: ["Reports"]
+    summary: Registers
+    parameters:
+      - in: query
+        name: flag
+        required: true
+        schema:
+          type: integer
+        description: "`0`: Sale, `1`: Purchase"
+
+      - in: query
+        name: calculatefrom
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "DD-MM-YYYY"
+
+      - in: query
+        name: calculateto
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "DD-MM-YYYY"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      srno:
+                        type: integer
+                      invid:
+                        type: integer
+                      invoiceno:
+                        type: string
+                      invoicedate:
+                        type: string
+                      customername:
+                        type: string
+                      customertin:
+                        type: string
+                      grossamount:
+                        type: string
+                      taxfree:
+                        type: string
+                      tax:
+                        type: object
+                      taxamount:
+                        type: object
+                      icflag:
+                        type: integer
+                      custgstin:
+                        type: string
+                totalrow:
+                  type: object
+                taxcolumns:
+                  type: array
+                  items:
+                    type: string
+
+product_register:
+  get:
+    tags: ["Reports"]
+    summary: Product Register
+    parameters:
+      - in: query
+        name: goid
+        required: true
+        schema:
+          type: integer
+        description: "Godown ID"
+
+      - in: query
+        name: productcode
+        required: true
+        schema:
+          type: integer
+        description: "Product Code"
+
+      - in: query
+        name: startdate
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "YYYY-MM-DD"
+
+      - in: query
+        name: enddate
+        required: true
+        schema:
+          type: string
+          format: date
+        description: "YYYY-MM-DD"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      date:
+                        type: string
+                      particulars:
+                        type: string
+                      trntype:
+                        type: string
+                      dcid:
+                        type: string
+                      dcno:
+                        type: string
+                      invid:
+                        type: string
+                      invno:
+                        type: string
+                      tnid:
+                        type: string
+                      tnno:
+                        type: string
+                      rnid:
+                        type: string
+                      rnno:
+                        type: string
+                      inward:
+                        type: string

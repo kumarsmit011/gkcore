@@ -1,0 +1,52 @@
+customerDetails:
+  type: object
+  additionalProperties: false
+  required: [csflag, state, custname]
+  properties:
+    custname:
+      type: string
+    custaddr:
+      type: string
+    state:
+      type: string
+    pincode:
+      type: string
+    csflag:
+      type: integer
+      enum: [3, 19]
+      description: 3 = customer, 19 = supplier
+    custtan:
+      type: string
+    custphone:
+      type: string
+    custemail:
+      type: string
+    custfax:
+      type: string
+    custpan:
+      type: string
+    gst_reg_type:
+      type: integer
+    gst_party_type:
+      type: integer
+    gstin:
+      type: object
+      additionalProperties:
+        type: string
+      description: Keys are state codes and values are gstin corresponding to that state code
+      example: { "10": "10AABCU9603R1Z2" }
+
+bankDetails:
+  type: object
+  properties:
+    bankdetails:
+      type: object
+      properties:
+        accountno:
+          type: string
+        bankname:
+          type: string
+        ifsc:
+          type: string
+        branchname:
+          type: string

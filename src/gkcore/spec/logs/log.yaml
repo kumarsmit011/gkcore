@@ -1,0 +1,29 @@
+get:
+  tags: ["Logs"]
+  operationId: getAllLogs
+  summary: Get all organisation logs for current financial year
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            $ref: "./templates.yaml#/components/schemas/logArray"
+
+post:
+  tags: ["Logs"]
+  operationId: addLog
+  summary: Add a log entry.
+  requestBody:
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            activity:
+              type: string
+          required:
+            - activity
+  responses:
+    200:
+      description: Created

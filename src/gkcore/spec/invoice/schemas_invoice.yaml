@@ -1,0 +1,565 @@
+basicInvoiceDetails:
+  type: object
+  properties:
+    invid:
+      type: integer
+    invoiceno:
+      type: string
+    invoicedate:
+      type: string
+      format: date
+
+allInvoiceDetails:
+  type: object
+  properties:
+    csflag:
+      type: integer
+      enum: [3, 19]
+      description: 3 = customer, 19 = supplier
+    custname:
+      type: string
+    invoicetotal:
+      type: number
+    attachmentcount:
+      type: integer
+
+invoiceListDetails:
+  type: object
+  properties:
+    srno:
+      type: string
+    dcno:
+      type: string
+    dcdate:
+      type: string
+      format: date
+    godown:
+      type: string
+    netamt:
+      type: number
+    taxamt:
+      type: number
+    custname:
+      type: string
+    csflag:
+      type: integer
+      enum: [3, 19]
+      description: 3 = customer, 19 = supplier
+    inoutflag:
+      type: integer
+      enum: [9, 15]
+      description: 9 = sale, 15 = purchase
+    custtin:
+      type: string
+    grossamt:
+      type: number
+    cancelflag:
+      type: integer
+    billentryflag:
+      type: integer
+
+invoiceRectifyListDetails:
+  type: object
+  properties:
+    custid:
+      type: integer
+    custname:
+      type: string
+    csflag:
+      type: integer
+      enum: [3, 19]
+      description: 3 = customer, 19 = supplier
+
+inoutflag:
+  type: integer
+  enum: [9, 15]
+  description: 9 = sale, 15 = purchase
+
+delchalPayload:
+  type: object
+  properties:
+    delchaldata:
+      properties:
+        cess:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product cess rate
+        consignee:
+          type: object
+          properties:
+            consigneename:
+              type: string
+            tinconsignee:
+              type: string
+            gstinconsignee:
+              type: string
+            consigneeaddress:
+              type: string
+            consigneestate:
+              type: string
+            consigneestatecode:
+              anyOf:
+                - type: string
+                - type: integer
+            consigneepincode:
+              type: string
+        contents:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: number
+            description: Keys are product rates and values are qty
+          description: Keys are product id
+        custid:
+          type: integer
+          description: id of the customer / supplier to whom the sale/ purchase is made to. Please use /customer api to get the proper customer ids.
+        dateofsupply:
+          type: string
+          format: date
+        dcdate:
+          type: string
+          format: date
+        dcflag:
+          type: integer
+          description: Type of transaction. 4 - sales, 16 - purchase.
+        dcnarration:
+          type: string
+          description: Comments for the delivery note.
+        dcno:
+          type: string
+          description: Delivery note number, a string
+          example: 1/DOUT-22
+        delchaltotal:
+          type: number
+          example: "750.65"
+        designation:
+          type: string
+          description: Role of the user creating the delivery note
+        discflag:
+          type: integer
+          enum: [1, 16]
+          description: discount flag, 1 - amount, 16 - percent. Please use 1 for testing
+        discount:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product discount rates
+        freeqty:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product free qty
+        inoutflag:
+          type: integer
+          enum: [9, 15]
+          description: 9 - purchase, 15 - sale
+        issuername:
+          type: string
+          description: Name of the user creating the delivery note
+        modeoftransport:
+          type: string
+          description: Mode of transportation. e.g. 'Road', 'Rail', 'Air', 'Ship', 'Other'
+        noofpackages:
+          type: integer
+          description: Number of packages
+        orgstategstin:
+          type: string
+          description: GSTIN of the organisation, e.g. 36AALCA1638A1Z2
+        roundoffflag:
+          type: integer
+          enum: [0, 1]
+          description: 0 - true, 1 - false. Denotes if the delivery note total is rounded off or not.
+        sourcestate:
+          type: string
+          description: If sale, state of organisation. If Purchase state of the customer. e.g. Karnataka
+        taxstate:
+          type: string
+          description: If sale, state of customer. If Purchase state of the organisation. e.g. Karnataka
+        tax:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product tax rate
+        taxflag:
+          type: integer
+          enum: [7, 22]
+          description: 7 - GST, 22 - VAT
+        totalinword:
+          type: string
+          example: Seven Hundred Fifty Rupees and Sixty Five Paise
+        vehicleno:
+          type: string
+    stockdata:
+      properties:
+        goid:
+          type: integer
+          description: Godown id
+        inout:
+          type: integer
+          enum: [9, 15]
+          description: 9 - purchase 15 - sales
+
+payload:
+  properties:
+    invoice:
+      type: object
+      required: [invoiceno, invoicedate, invoicetotal, orgcode, custid, dcid]
+      properties:
+        av:
+          type: object
+          required: [product, prodData, avtax, totaltaxable, taxpayment]
+          properties:
+            product:
+              type: object
+              additionalProperties:
+                type: number
+              description: Keys are product names, values are product taxable rates
+            prodData:
+              type: object
+              additionalProperties:
+                type: number
+              description: Keys are product id, values are product taxable rates
+            avtax:
+              type: object
+              properties:
+                GSTName:
+                  type: string
+                CESSName:
+                  type: string
+            totaltaxable:
+              type: number
+            taxpayment:
+              type: number
+        invoiceno:
+          type: string
+          description: Invoice number, a string
+          example: 1/SL-22
+        ewaybillno:
+          type: string
+          description: Not used, for testing use empty string ""
+        invoicedate:
+          type: string
+          format: date
+          description: Date in which Invoice was created
+        orgstategstin:
+          type: string
+          description: GSTIN of the organisation, e.g. 36AALCA1638A1Z2
+        issuername:
+          type: string
+          description: Name of the user creating the invoice
+        designation:
+          type: string
+          description: Role of the user creating the invoice
+        address:
+          type: string
+          description: Organisation address
+        pincode:
+          type: string
+          description: Organisation pincode
+        custid:
+          type: integer
+          description: id of the customer / supplier to whom the sale/ purchase is made to. Please use /customer api to get the proper customer ids.
+        roundoffflag:
+          type: integer
+          enum: [0, 1]
+          description: 0 = true, 1 = false. Denotes if the delivery note total is rounded off or not.
+        paymentmode:
+          type: integer
+          enum: [2, 3, 15]
+          description: 2 = cash, 3 = bank, 15 = credit
+        transportationmode:
+          type: string
+          description: Mode of transportation. e.g. 'Road', 'Rail', 'Air', 'Ship', 'Other'
+        reversecharge:
+          type: integer
+          enum: [0, 1]
+          description: 0 = true, 1 = false. Please use 1 for testing
+        discflag:
+          type: integer
+          enum: [1, 16]
+          description: discount flag, 1 - amount, 16 - percent. Please use 1 for testing
+        invnarration:
+          type: string
+          description: Comments for the Invoice created. Can be any string
+        dcid:
+          type: integer
+          description: Id of the delivery note created before invoice. Please use POST /delchal to create a delivery note and the dcid will be sent in server response.
+        sourcestate:
+          type: string
+          description: If sale, state of organisation. If Purchase state of the customer. e.g. Karnataka
+        taxstate:
+          type: string
+          description: If sale, state of customer. If Purchase state of the organisation. e.g. Karnataka
+        inoutflag:
+          type: integer
+          enum: [9, 15]
+          description: 9 - purchase, 15 - sales
+        supinvno:
+          type: string
+          description: Invoice number from the supplier bill
+        supinvdate:
+          type: string
+          format: date
+          description: Invoice date from the supplier bill
+        taxflag:
+          type: integer
+          enum: [7, 22]
+          description: 7 - GST, 22 - VAT
+        invoicetotal:
+          type: number
+          example: "750.65"
+        invoicetotalword:
+          type: string
+          example: Seven Hundred Fifty Rupees and Sixty Five Paise
+        consignee:
+          type: object
+          properties:
+            consigneename:
+              type: string
+            tinconsignee:
+              type: string
+            gstinconsignee:
+              type: string
+            consigneeaddress:
+              type: string
+            consigneestate:
+              type: string
+            consigneestatecode:
+              anyOf:
+                - type: string
+                - type: integer
+            consigneepincode:
+              type: string
+        contents:
+          type: object
+          additionalProperties:
+            type: object
+            additionalProperties:
+              type: number
+            description: Keys are product rates and values are qty
+          description: Keys are product id
+        pricedetails:
+          type: array
+          items:
+            type: object
+            properties:
+              custid:
+                type: integer
+              productcode:
+                type: integer
+              inoutflag:
+                type: integer
+                enum: [9, 15]
+                description: 9 - purchase, 15 - sales
+              lastprice:
+                type: number
+        tax:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product tax rate
+        cess:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product cess rate
+        freeqty:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product free qty
+        discount:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product discount rates
+        bankdetails:
+          type: object
+          properties:
+            accountno:
+              type: object
+            bankname:
+              type: object
+            ifsc:
+              type: object
+            branch:
+              type: object
+        vehicleno:
+          type: string
+        dateofsupply:
+          type: string
+          format: date
+        attachment:
+          type: array
+          items:
+            type: string
+            format: byte
+          description: array of base 64 images
+        attachmentcount:
+          type: integer
+          description: number of attachments being sent
+    stock:
+      type: object
+      required: [items, inout]
+      properties:
+        items:
+          type: object
+          additionalProperties:
+            type: number
+          description: Keys are product id, values are product qty
+        inout:
+          type: integer
+          enum: [9, 15]
+          description: 9 - purchase, 15 - sales
+
+singleInvoiceDetails:
+  type: object
+  properties:
+    roundoffvalue:
+      type: number
+    invid:
+      type: integer
+    taxflag:
+      type: integer
+    invoiceno:
+      type: string
+    ewaybillno:
+      type: string
+    invoicedate:
+      type: string
+      format: date
+    icflag:
+      type: integer
+    invoicetotal:
+      type: number
+    invoicetotalword:
+      type: string
+    bankdetails:
+      type: object
+    orgstategstin:
+      type: string
+    paymentmode:
+      type: integer
+    inoutflag:
+      type: integer
+    roundoff:
+      type: integer
+    narration:
+      type: string
+    discflag:
+      type: integer
+    supinvno:
+      type: string
+    supinvdate:
+      type: string
+      format: date
+    deletable:
+      type: integer
+    sourcestate:
+      type: string
+    sourcestatecode:
+      type: integer
+    address:
+      type: string
+    pincode:
+      type: string
+    issuername:
+      type: string
+    designation:
+      type: string
+    consignee:
+      type: string
+    attachmentcount:
+      type: integer
+    dateofsupply:
+      type: string
+      format: date
+    transportationmode:
+      type: string
+    vehicleno:
+      type: string
+    reversecharge:
+      type: integer
+    destinationstate:
+      type: string
+    taxstatecode:
+      type: integer
+    dcid:
+      type: integer
+    dcno:
+      type: string
+    dcdate:
+      type: string
+      format: date
+    custSupDetails:
+      type: object
+      properties:
+        custid:
+          type: integer
+        custname:
+          type: string
+        custsupstate:
+          type: string
+        custaddr:
+          type: string
+        csflag:
+          type: integer
+        pincode:
+          type: string
+        custphone:
+          type: string
+        custsupstatecode:
+          type: integer
+        custgstinlist:
+          type: string
+        statelist:
+          type: string
+        gst_reg_type:
+          type: integer
+        gst_party_type:
+          type: integer
+        custtin:
+          type: string
+        custgstin:
+          type: string
+    billentrysingleflag:
+      type: integer
+    totaldiscount:
+      type: number
+    totaltaxablevalue:
+      type: number
+    totaltaxamt:
+      type: number
+    totalcessamt:
+      type: number
+    taxname:
+      type: string
+    invcontents:
+      type: object
+      properties:
+        proddesc:
+          type: string
+        gscode:
+          type: integer
+        uom:
+          type: string
+        qty:
+          type: number
+        freeqty:
+          type: number
+        priceperunit:
+          type: number
+        discount:
+          type: number
+        taxableamount:
+          type: number
+        totalAmount:
+          type: number
+        taxname:
+          type: string
+        taxrate:
+          type: number
+        taxamount:
+          type: number

@@ -1,0 +1,25 @@
+get:
+  tags: ["Import / Export Data"]
+  summary: Export organisation's data into Spreadsheet(.xlsx) format
+  parameters:
+    - in: query
+      name: yearstart
+      required: true
+      description: Financial Year End (YYYY-MM-DD)
+      schema:
+        type: string
+        format: date
+    - in: query
+      name: yearend
+      description: Financial Year End (YYYY-MM-DD)
+      required: true
+      schema:
+        type: string
+        format: date
+  responses:
+    "200":
+      description: Response with .xlsx file payload
+      content:
+        application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+          schema:
+            format: binary

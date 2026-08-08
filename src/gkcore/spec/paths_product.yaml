@@ -1,0 +1,394 @@
+product:
+  get:
+    tags: ["Product & Service"]
+    summary: Fetch all products/services belonging to an organisation
+    operationId: getAllProducts
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    $ref: "./product/schemas_product.yaml#/productListDetails"
+
+  post:
+    tags: ["Product & Service"]
+    summary: Create a new product
+    operationId: addProduct
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "./product/schemas_product.yaml#/productPayload"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: integer
+                  description: id of the product created will be returned on success
+
+product_productcode:
+  get:
+    tags: ["Product & Service"]
+    summary: Get a product's/service's data
+    operationId: getProduct
+    parameters:
+      - $ref: "./product/params_product.yaml#/productcode"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  $ref: "./product/schemas_product.yaml#/productDetails"
+                numberofgodowns:
+                  type: integer
+  put:
+    tags: ["Product & Service"]
+    summary: Edit a product's/service's data
+    operationId: editProduct
+    parameters:
+      - $ref: "./product/params_product.yaml#/productcode"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: "./product/schemas_product.yaml#/productPayload"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+  delete:
+    tags: ["Product & Service"]
+    summary: Delete a product/service
+    operationId: deleteProduct
+    parameters:
+      - $ref: "./product/params_product.yaml#/productcode"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productcode:
+                type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+product_tax:
+  get:
+    tags: ["Product & Service"]
+    summary: Returns either VAT or GST for a selected product/service based on product code and state.
+    operationId: getTaxForProduct
+    parameters:
+      - in: query
+        name: taxflag
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: source
+        schema:
+          type: string
+        required: true
+        description: State from which the product is to be transacted
+      - in: query
+        name: destination
+        schema:
+          type: string
+        required: true
+        description: State to which the product is to be transacted
+      - in: query
+        name: productcode
+        schema:
+          type: integer
+        required: true
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  oneOf:
+                    - type: object
+                      properties:
+                        VAT:
+                          type: number
+                    - type: object
+                      properties:
+                        CVAT:
+                          type: number
+                    - type: object
+                      properties:
+                        CESS:
+                          type: number
+                        SGST:
+                          type: number
+                        IGST:
+                          type: number
+product_check_gst:
+  get:
+    tags: ["Product & Service"]
+    summary: Determine what kind of tax will be applible to the goods of corresponding organisation
+    operationId: getvatorgst
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: integer
+product_hsn:
+  get:
+    tags: ["Product & Service"]
+    summary: Fetches the HSN code, UOM automatically when a product is selected
+    description: services do not have UOM
+    operationId: gethsnuom
+    parameters:
+      - in: query
+        name: productcode
+        schema:
+          type: integer
+        required: true
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    unitname:
+                      type: string
+                    gscode:
+                      type: integer
+product_stock:
+  post:
+    tags: ["Product & Service"]
+    summary: Saves the opening stock for a selected product
+    operationId: addstock
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              productdetails:
+                type: object
+                additionalProperties:
+                  type: integer
+                  description: Keys are product ids and values are opening stock
+                example: { 1: 5.55, 2: 3.60 }
+              goid:
+                type: integer
+                description: Godown id
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+product_lastprice:
+  get:
+    tags: ["Product & Service"]
+    summary: Fetches the last price for which a product was sold/purchased to/from a party
+    operationId: lastPrice
+    parameters:
+      - in: query
+        name: custid
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: productcode
+        schema:
+          type: integer
+        required: true
+      - in: query
+        name: inoutflag
+        schema:
+          type: integer
+        required: true
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: number
+
+godown_product:
+  get:
+    tags: ["Product & Service"]
+    summary: Fetches the opening stock of a product from godowns its a part of
+    operationId: getProductbyGodown
+    parameters:
+      - in: path
+        name: productcode
+        required: true
+        schema:
+          type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      goid:
+                        type: integer
+                        description: Godown id
+                      openingstockvalue:
+                        type: number
+                        description: Depricated, please use goopeningstock
+                      goopeningstock:
+                        type: number
+                        description: Godown opening stock
+                      productcode:
+                        type: integer
+product_godown:
+  get:
+    tags: ["Product & Service"]
+    summary: Fetches the opening stock of products from a specified godown
+    operationId: getProductfromGodown
+    parameters:
+      - in: path
+        name: godownid
+        required: true
+        schema:
+          type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      goprodid:
+                        type: integer
+                        description: Unique id from a table that maintains the relation between a product and a godown
+                      goopeningstock:
+                        type: number
+                      productcode:
+                        type: integer
+
+product_category:
+  get:
+    tags: ["Product & Service"]
+    summary: Fetch the products/services belonging to a given category
+    operationId: getProductbyCategory
+    parameters:
+      - in: path
+        name: categorycode
+        required: true
+        schema:
+          type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    additionalProperties: false
+                    properties:
+                      productcode:
+                        type: integer
+                      productdesc:
+                        type: number
+                        description: Product name

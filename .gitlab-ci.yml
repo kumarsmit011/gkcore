@@ -1,0 +1,83 @@
+stages:
+  - build
+  - deploy
+  # tests are run against the dev server, so deploy stage should complete first
+  - test
+
+services:
+  - docker:20.10.19-dind
+  - postgres:alpine
+
+variables:
+  POSTGRES_USER: "gkadmin"
+  POSTGRES_PASSWORD: "gkadmin"
+  POSTGRES_DB: "gkdata"
+  GKCORE_DB_URL: "postgres://gkadmin:gkadmin@postgres:5432/gkdata"
+
+# test run gkcore on creating or updating merge requests
+gkcore:
+  image: python:3.12-slim
+  stage: test
+  script:
+   - apt update && apt install -y build-essential libpq-dev curl python3-poetry
+   - poetry build && pip install dist/*.whl
+   - gkdb --init
+   - gkdb --migrate
+   - prequest src/gkcore/configs/development.ini /state
+  rules:
+  - if: $CI_PIPELINE_SOURCE == 'merge_request_event'
+
+# runs the api tests against the dev server
+api_tests:
+  image: digitalfreedom/nexial-core:latest
+  stage: test
+  # this job runs with a delay to make sure the dev server
+  # is updated to latest commit
+  script: |
+    cd tests/artifact
+    nexial.sh -plan plan/GNUKhata-plan.xlsx || true
+  allow_failure: true
+  # this job runs only on the master branch
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'master'
+      when: delayed
+      start_in: 2 minutes
+  artifacts:
+    paths:
+      - /builds/gnukhata/gkcore/tests/output
+
+# build gkcore docker image from devel commits & upload it to docker hub
+docker-devel:
+  image: docker:20.10.19
+  stage: build
+  script:
+    # build the docker image & push to the dockerhub
+    - docker login -u digitalfreedom -p $DOCKERHUB_PWD
+    - docker build -t digitalfreedom/gkcore:devel --build-arg VERSION=$CI_COMMIT_SHORT_SHA .
+    - docker push digitalfreedom/gkcore:devel
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'devel'
+
+# build gkcore docker image on a release/tags & push it to the docker hub
+docker-prod:
+  image: docker:20.10.19
+  stage: build
+  script:
+    # build the docker image & push to the dockerhub
+    - docker login -u digitalfreedom -p $DOCKERHUB_PWD
+    - docker build -t digitalfreedom/gkcore:$CI_COMMIT_TAG --build-arg VERSION=$CI_COMMIT_TAG .
+    - docker push digitalfreedom/gkcore:$CI_COMMIT_TAG
+    # create alias for the latest tag
+    - docker tag digitalfreedom/gkcore:$CI_COMMIT_TAG digitalfreedom/gkcore:latest
+    - docker push digitalfreedom/gkcore:latest
+  rules:
+    - if: $CI_COMMIT_TAG
+
+# deploy devel branch changes to gkcore test server
+update_test_server:
+  stage: deploy
+  image: curlimages/curl:latest
+  script:
+    - curl -f $TEST_SERVER_HOOK
+  rules:
+    - if: $CI_COMMIT_BRANCH == 'devel'

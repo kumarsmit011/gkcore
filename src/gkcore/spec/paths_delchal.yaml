@@ -1,0 +1,297 @@
+delchal:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch all delivery notes
+    operationId: getAlldelchal
+    parameters:
+      - $ref: "./delchal/params_delchal.yaml#/inoutflag"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    $ref: "./delchal/schemas_delchal.yaml#/delchalListDetails"
+
+  post:
+    tags: ["Delivery Note"]
+    summary: Create a new delivery note
+    operationId: adddelchal
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  delchaldata:
+                    $ref: "./delchal/schemas_delchal.yaml#/delchal"
+              - type: object
+                properties:
+                  stockdata:
+                    $ref: "./delchal/schemas_delchal.yaml#/stock"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: integer
+                  description: id of the delchal created will be returned on success
+
+delchal_dcid:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch Delivery Note details
+    operationId: getdelchal
+    parameters:
+      - $ref: "./delchal/params_delchal.yaml#/dcid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  $ref: "./delchal/schemas_delchal.yaml#/delchalSingleDetails"
+  put:
+    tags: ["Delivery Note"]
+    summary: Edit Delivery Note's data
+    operationId: editdelchal
+    parameters:
+        - $ref: "./delchal/params_delchal.yaml#/dcid"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  delchaldata:
+                    allOf:
+                      - type: object
+                        properties:
+                          dcid:
+                            type: integer
+                      - $ref: "./delchal/schemas_delchal.yaml#/delchal"
+              - type: object
+                properties:
+                  stockdata:
+                    $ref: "./delchal/schemas_delchal.yaml#/stock"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+  delete:
+    tags: ["Delivery Note"]
+    summary: Cancel a Delivery Note
+    operationId: cancelDelchal
+    parameters:
+        - $ref: "./delchal/params_delchal.yaml#/dcid"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+delchal_cancel_dcid:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch cancelled delivery note details
+    operationId: delchal_cancel_dcid
+    parameters:
+      - $ref: "./delchal/params_delchal.yaml#/dcid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  $ref: "./delchal/schemas_delchal.yaml#/delchalSingleDetails"
+
+delchal_cancel:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch all cancelled delivery note details
+    operationId: listofCancelDelchal
+    parameters:
+      - in: query
+        name: inputdate
+        required: true
+        schema:
+          type: string
+          format: date
+      - in: query
+        name: del_cancelled_type
+        required: true
+        schema:
+          type: string
+          enum: ["0", "1"]
+      - in: query
+        name: inout
+        required: true
+        schema:
+          type: string
+          enum: ["i", "o"]
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    $ref: "./delchal/schemas_delchal.yaml#/delchalCancelledListDetails"
+
+delchal_attachment:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch delivery note attachment
+    operationId: getdelchalattachment
+    parameters:
+        - $ref: "./delchal/params_delchal.yaml#/dcid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: string
+                  format: byte
+                dcno:
+                  type: string
+                cancelflag:
+                  type: integer
+                userrole:
+                  type: integer
+
+delchal_last:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch last delnote details
+    operationId: getLastDelChalDetails
+    parameters:
+      - in: query
+        name: status
+        required: true
+        schema:
+          type: integer
+          enum: [9, 15]
+          description: 9 - purchase, 15 sales
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    dcdate:
+                      type: string
+                      format: date
+                    dcno:
+                      type: string
+
+delchal_next_id:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch next Delivery note id
+    operationId: getdelchalid
+    parameters:
+      - in: query
+        name: status
+        required: true
+        schema:
+          type: integer
+          enum: [9, 15]
+          description: 9 - purchase, 15 sales
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                dcid:
+                  type: integer
+  
+delchal_invid:
+  get:
+    tags: ["Delivery Note"]
+    summary: Fetch Invoice id details
+    operationId: getinviddetails
+    parameters:
+      - $ref: "./delchal/params_delchal.yaml#/dcid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+

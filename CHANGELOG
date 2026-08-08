@@ -1,0 +1,323 @@
+[19 June 2020 Release 7.0]
+* Upgraded entire code base to Python 3 (Python3.8).
+* Documents details in ledger.
+* Total amount in word in Delivery Note.
+* New field narration in Rejection Note and Delivery Note.
+* Removed contents of gstin field if the key is not sent to edit organisation API.
+* Enhanced functionality to add customer/supplier data in API for Accounts .
+* New function to select all companies with same financial year.
+* Minor bugfixes and enhancements.
+
+
+[16 December 2019 Release 6.50]
+* Function to cancel delivery note.
+* New table to store cancelled delivery note data.
+* Function to cancel invoice when delivery note is associated with the invoice.
+* New fields in product table  to save discount in percent and as amount. 
+* New field discflag in table invoice , invoicebin and delchal.
+* Field to save narration in purchase and sales order.
+* Change in APIs related to the field added. 
+* Enhancement in code to calculate discount in Invoice, Cashmemo and Delivery note.
+* Function to show states of customers for which gstin is provided.
+* Performance Enhancements in APIs and database.
+* Bug Fixes.
+
+
+
+[16 August 2019 Release 6.0 Updates] 
+* Round Off feature for Delivery note , Credit/Debit note and Purchase/Sales order with automatic accounting entries.
+* Accounts necessary for automatic accounting entries are created atomatically if they are found to be absent.
+* PIN Code of Customer/Supplier is saved.
+* AccountsByRule function tweaked to allow both customers and suppliers in Sale and Purchase vouchers.
+* P&L and Balance Sheet reports API accepts any range of date within a financial year.
+* Provision to have multiple sales invoice number series.
+* Field for eway bill has been added.
+* Field for narration in Invoice and Debit Credit Note.
+* Default accounts bug resolved.
+* Dashboard performance enhancement.
+* Performance Enhancements in APIs and database.
+* Bug Fixes.
+
+
+[26 April 2019 Release 6.0]
+* Added API for dashboard and made related modifications in other APIs.
+* Added API for Budget.
+* Modified DELETE API of Invoice to implement Cancellation of Invoice.
+* Automatic voucher number enhanced.
+* Modifications in API of Invoice for Rounding Off invoice total value.
+* Accounting with Invoice option depricated.
+* Organisation POST API returns orgcode.
+* Modification in tax API to allow Godown In Charge to add tax to product.
+* Performance Enhancements.
+
+	
+[29-November-2018 Release 5.50]
+* API for GSTR1 b2b, b2cl, b2cs, cdnr, cdnur, hsn1.  
+* Modifications in Profit and Loss Report.  
+* New fields for Sale Price and MRP in Product Table.  
+* Corrected query that returns invid after Invoice/Cash Memo is saved.  
+* Function to delete invoices that have nothing linked to them and no billwise entry made.  
+* Function to get list of invoice that can be rectified.
+* Improved documentation.	
+	
+[15-August-2018 Release 5.25]
+* New Unit of measurement.
+* Bug fixes and enhancements for bill wise accounting.
+* Connection string for linux and windows.	
+
+[15-June-2018 Release 5.10]
+* Api for automatic sales and purchase voucher entry	
+* Api for automatic credit & debit note voucher entry
+* Payment and receipt to be made by bank and cash transfer
+* Sorting functionality in major reports	
+* Automatic gst sammary report
+* gkupgrade() revamp
+* new flags in organisation
+* Default accounts for sales, purchase,bank,cash transaction
+* Calculation enhancement in Profit and Loss report and Balance sheet
+
+
+[12-April-2018 Release 5.0]
+* Roll over without close book	
+* Debit credit note API
+* Rejection Note API	
+* GST compliant Sales and purchase order API
+* Subgroups under Direct Income and Direct Expenses
+* Altered rules in accounts by rule API
+* Added new columns "invoicetotal","address" in invoice table
+* Profit and loss statement code changed for structured tree format
+* Free quantity and billed quantity also added when stock details   	
+* List of outstanding invoices.
+* GST compliant sales and purchase register
+* Inoutflag for cashmemo and delivery chalan
+* New columns added in delivery note to make it GST compliant
+* GST summary report
+
+	
+[10-January-2018 Release 4.50]
+* Refinement in Transaction API
+* Function in Transaction API to auto generate Voucher No.
+* Function in Bill Wise API that returns all unpaid invoices.
+* Function in Bill Wise API that returns both unpaid and partially paid invoices.
+* Function in User API that returns list of users having same role and their role.
+* Function in User API that returns all data of a user(accessible only to admin).
+* All details of a user can be edited by admin.
+* Consignee details can be added in Delivery Note.
+* Function in Godowns API to return name and address of all godowns that contain products.
+* Modified PUT of Invoice API.
+
+[10-November-2017 Release 4.25 Update]
+* Permissions to Godown In Charge modified.
+* CESS field added in invoice and cash memo.
+* Sales and purchase register now reflects along with CESS.
+* Gkupgrade modified as per modifications in gkdb.
+* Transfer Note get all function modified.
+* A function to get user role.
+* Get all delchal function.
+* Minor bugs solved.
+
+[21-September-2017 Release 4.25]
+*Gkupgrade modified as per modifications in gkdb
+*List of users report
+*Function in api_godown modified to get number of product a content.
+*Api for billwise accounting
+*List of vouchers in chronological order.
+*Get function in api_log modified to get godowns associated with a godown in charge and sr no.
+*Edit function of category modified to edit/delete/added child categories tax and specifications when its parent category's parameters are edited.
+*Godown in charge user access corrected.
+*Function to get customer details when account code is recieved and matches the same.
+*Fromgodown column added in transfernote table and api also revamped.
+*Function corrected to get godown wise product.
+*Altered sales and purchase rules so that new sub-groups can also be added.
+*Category wise stock on hand report.
+*Sales and purchase registers.
+*Modified unbilled deliveries function.
+*Logo column added in organisation also api modified accordingly.
+*Goprod table and functions related to it modified.
+*Bank name,branch name,instrumentno,instrumentdate to store Bank details [Instrument details] in vouchers also functions get and post changed accordingly.
+*List of transfernotes report.
+*New columns in organisation table invsflag and billwiseflag to set Organisation preferences.
+*List of invoices report.
+*Removed issuerid column from delchal table.
+*Gst compatibility work includes Multiple gstin column in customerandsupplier and organisation table.
+*New columns consignee,freeqty,vehicle no,reversecharge,bank details transportation mode, date of supply ,discount added in invoice table Complete revamp of  invoice code.
+*new columns gscode and gsflag added in product table , also api_product modified to post and get services when organisation comes under gst taxation.
+*Function to get GST or VAT type for respective organisation.
+*State table created and insert statements written to populate table by state and it's stateid.
+*Function modified to get just products and both.
+	
+	
+
+[8-April-2017 Release 4.0 Update]
+*Altered rules for sales and purchase for gst/vat implementations.
+*Closing balance function now provides balance types (Dr/Cr) along with the balance.  
+*Improved documantation.
+
+[30-March-2017 Release 4.0]
+* Function for consolidated balancesheet of holding and subsidiary companies.
+* Godown-in-charge and Internal auditor userrole added.
+* API for Purchase order and Sales order.
+* Attachment of file field added in invoice and delchal.
+* Unbilled deliveries report.
+* Stock on hand report.
+* Godown wise stock on hand report.
+* Function to get current balance of account.
+* Multple drs and crs in a ledger report.
+* A flatlist to get last 5 godowns created.
+* Date field in stock .
+* Modified stock report and godown wise stock report.
+* Function to manage database upgrade.
+
+[7-February-2017 Release 3.5.2 ]
+* A flatlist to get all projects of organisation.
+* A flatlist to get details of all accounts under a group.
+* Received Date in transfernote table.
+* Modification in transfernote API for received transfernote.
+* Modification in report API to output delivery note no and invoice no at same time (if present).
+* Modification in ledger API to get no. of credit vouchers and debit vouchers.
+* Make editing of godown wise opening stock perfect.
+
+[13-December-2016 Release 3.5.1]
+* A flatlist to get all groups and subgroups
+* A flatlist to get all accounts
+* A joint table for godown wise opening stock
+* Stock quantity in product list
+* Alter table for database compatibility
+* Modification in product API for adding godown wise opening stock
+* Stock report
+* Godown wise stock report
+
+[17-November-2016 Release 3.5]
+* Addition of support for choosing themes.
+* Facility of search in all table views.
+* Much awaited inventory module added which includes:
+  - Creation of dynamic categories and sub-categories,
+  - Creation of products under the categories with custom units of measurement,
+  - Creation of customer/supplier and Godown,
+  - Generation and printing of Delivery Note,
+  - Generation and printing of Invoice,
+  - Generation and printing of Cash Memo,
+  - Generation and printing of Transfer Note,
+  - Complete database backup and restore,
+  - Generation and printing of product wise Stock report with spreadsheet option.
+  - Generation and printing of godown report with spreadsheet option.
+  - Generation and printing of Category wise report with spreadsheet option.
+  - Linking of invoice and vouchers.
+  - Option to activate inventory module any time in the financial year.
+
+[18-Oct-2016 Release 3.0.1]
+* Now the signature generated is a 2560 bits RSA key.
+
+[04-July-2016 Release 3.0]
+* Unique feature for attaching official documents with vouchers (invoices, bills etc).
+* Running Dr and Cr totals in printed reports like ledger, trial balance, cash flow and project statement.
+* Adverse balance indication.
+* Refined data structure output for both balance sheet.
+* Forgot Password system implemented.
+* api now returns the last voucher no. and date for the selected voucher type.
+* Minor bug fixes
+
+[18-June-2016 Release 3.0RC]
+* Now vouchertype is also sent along with ledger details.
+* Added license and authors information.
+* Minor bug fixes.
+
+
+[09-June-2016 Release 3.0 RC]
+* Complete revamp for the core API in REST.
+* Added feature to show monthly ledgers.
+* Inside ledger balance shown per transaction.
+* Group wise balances with account count while creating accounts
+* Improved bank reconciliation
+* Added voucher type in search criteria
+* Used json data type in CR and DR
+* Voucher table now has attachment field for a future feature
+* Big performance and speed improvements using alchemy connection pool.
+
+[27-Jan-2016 Release 2.6.1]
+* Minor improvements and bug fixes.
+
+[3-Nov-2015 Release 2.6.0]
+* Added the core logic for transaction security.
+* System generated accounts will now also include Opening Stock and Stock at the Beginning.
+* Improved the functionality of closebooks and rollover to include management of stocks.
+* Minor improvements and bugs fixes.
+
+[28-Aug-2015 Release 2.5.0]
+* Implemented core functionality for advanced calculation of profit and loss as seperate
+  account heads along with facility of transferring closing stock as opening stock entry after rollover.
+* Brought more stability to bank recon rpcs.
+* Now no duplicate organisation can be created.
+* Minor bug fixes.
+
+[24-July-2015 Release 2.4.0]
+* Corrected Bank Reconciliation Statement.
+* Fundamental changes which refines the way closebooks and rollover works.
+* Organizations with same names with different types can be safely created.
+
+[06-June-2015 Release 2.3.2]
+* Perfected CloseBooks and Rollover.
+
+[15-May-2015 Release 2.3.1]
+* Further refined Rollover and Closebooks.
+* Corrected names of a few default accounts like Income and Expenditure.
+
+[28-March-2015 Release 2.3]
+* Added the stored procedure for remove user.
+* Added the rpc for remove user.
+* Added the stored procedures for getting and setting the security question and answer in case the
+  user forgets the login password.
+* Added the rpc for getting and setting the the security question and answer in case the user forgets
+  the login password.
+* Added the procedure for closebooks.
+* Added the rpc for closebooks.
+
+[3-March-2015 Release 2.2.1]
+* Fixed a crutial bug where some times after deleting an account, we could not ad any more accounts.
+* Update of Install file and adduser script for Fedora Distro.
+* Added minor typo corrections in group heads.
+
+[8-Nov-2014 Release 2.2.0]
+* Major enhancement in the functionality of Bank Reconciliation, it also dispalys
+  the reconciled transactions which are above the reconciliation period along with it's actual reconciliation date.
+* Added the functionality for getting Rollover status  and also added the set and get rollover status.
+* Added the logic for setting the roflag and booksclosedflag during rolover and closing of books.
+
+[18-Oct-2014 Release 2.1.3]
+* Solved regression where software was crashing while saving or skiping on initialsetup form
+* Procedure syntax cahnged in rpc_main
+* Added stored procedure and functionality for getting organization
+* Bank reconciliation now also has opening balance
+
+[8-Oct-2014 Release 2.1.2]
+* Changed the hashbang to python2
+* Altered update bank recon to have closing and grand total with total dr, cr.
+* Further improvements in bank reco now closing balance and cr dr can be seen and the particulars
+  are properly seen.
+* Added Stability in cash flow and negative amount can be seen
+* finaly corrected the issue where payment with 0 would some tiems show as -0
+
+
+[13-Sept-2014 Release 2.1.1]
+
+* Fixed a major bug in Bank reconciliation to make the viewclearedanduncleared transactions consistent.
+
+[19-Aug-2014 Release 2.1]
+
+*Added new api for getclearedunclearedtransactions
+*Added new rpc getreconciledtransactions in rpc_reports
+*Updated deletclearedrecon stored procedure
+
+[22-July-2014 Release 2.0.1]
+* Fixed database connection issue during rollover
+
+[7-Jul-2014 Release 2.0  ]
+* added a new rpc function for getting list of accounts
+* modified stored procedures to show all accounts on Dr and Cr side for Payment and reseapt respectively
+* performance enhancement by removing code for creating unnecessary tables
+* alteration to global attributes to find if projectwise accounting is available
+* made 3 level user access possible -1: admin 0: manager 1: user
+* added pid to a pidfile for start stop daemons
+* all settings are now taken from configuration file
+* major security enhancement where engine connects to postgres via unix sockets
+* added scripts to create user and grant privileges

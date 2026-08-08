@@ -1,0 +1,164 @@
+uom:
+  get:
+    tags: ["Unit Of Measurement"]
+    summary: Fetch all UOMs
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      uomid:
+                        type: integer
+                      unitname:
+                        type: string
+                      description:
+                        type: string
+                      subunitof:
+                        type: integer
+                      sysunit:
+                        type: integer
+                        description: "sysunit is 1 for system generated units & 0 for user created one's. system units are official unit names prescribed by the GST council"
+                      uqc:
+                        type: integer
+
+  post:
+    tags: ["Unit Of Measurement"]
+    summary: Create a new unit of measurement
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [unitname, description]
+            properties:
+              unitname:
+                type: string
+              description:
+                type: string
+              subunitof:
+                type: integer
+                description: on adding this key, you should also specify the `conversionrate` key
+              conversionrate:
+                type: string
+              uqc:
+                type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+  put:
+    tags: ["Unit Of Measurement"]
+    summary: Edit unit of measurement
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [unitname, description]
+            properties:
+              unitname:
+                type: string
+              description:
+                type: string
+              subunitof:
+                type: integer
+                description: on adding this key, you should also specify the `conversionrate` key
+              conversionrate:
+                type: string
+              uqc:
+                type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+  delete:
+    tags: ["Unit Of Measurement"]
+    summary: Delete unit of measurement
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [uomid]
+            properties:
+              uomid:
+                type: integer
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+uom_single:
+  get:
+    tags: ["Unit Of Measurement"]
+    summary: Fetch details of a single unit of measurement
+    parameters:
+      - in: path
+        name: uomid
+        schema:
+          type: integer
+        required: true
+        description: to know about `uomid`, See the `GET` request result of `/unitofmeasurement`, which contains array of uoms with their uomid's
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      uomid:
+                        type: integer
+                      unitname:
+                        type: string
+                      description:
+                        type: string
+                      subunitof:
+                        type: integer
+                      sysunit:
+                        type: integer
+                        description: "sysunit is 1 for system generated units & 0 for user created one's. system units are official unit names prescribed by the GST council"
+                      uqc:
+                        type: integer
+                      flag:
+                        type: string
+                        description: Possible values are `True`, `False`. True means the UOM is already used in a product/service

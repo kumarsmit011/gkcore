@@ -1,0 +1,311 @@
+openapi: "3.0.0"
+
+info:
+  version: "0.8.0a"
+  title: GKCORE
+  description: |
+    API documentation of gkcore - GNUKhata's REST API server.
+
+    **gkstatus codes:**
+    The following is the meaning of the `gkstatus` codes, which are returned in `200` response:
+    ```json 
+      { 
+      "Success": 0, 
+      "DuplicateEntry": 1, 
+      "UnauthorisedAccess": 2, 
+      "ConnectionFailed": 3, 
+      "BadPrivilege": 4, 
+      "ActionDisallowed": 5, 
+      "ProxyServerError": 6, 
+      }
+    ```
+    **User roles:** These are the following user roles in an organisation with various access levels
+
+    ```json
+    {
+      -1: "Admin",
+      0: "Manager",
+      1: "Operator",
+      2: "Internal Auditor",
+      3: "Godown In Charge",
+    }
+    ```
+
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: gktoken
+    UserAuth:
+      type: apiKey
+      in: header
+      name: gkusertoken
+
+security:
+  - ApiKeyAuth: []
+
+paths:
+  /:
+    get:
+      tags: ["Public API's"]
+      summary: Check whether gkcore is running
+      security: [{}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gkstatus:
+                    type: integer
+                    description: 0 - success, 1 - something else
+                  version:
+                    type: string
+  /state:
+    get:
+      tags: ["Public API's", "State"]
+      summary: Get list of state codes
+      parameters:
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [all]
+          required: true
+      security: [{}]
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  gkstatus:
+                    type: integer
+                  gkresult:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        state_code:
+                          type: integer
+                        state_name:
+                          type: string
+                        state_abbr:
+                          type: string
+  # organisation
+  /organisation:
+    $ref: "./paths_organisation.yaml#/organisation"
+  # /organisation/all:
+  #   $ref: "./paths_organisation.yaml#/organisation_all"
+  /organisation/gstin:
+    $ref: "./paths_organisation.yaml#/organisation_gstin"
+  /organisation/attachment:
+    $ref: "./paths_organisation.yaml#/organisation_attachment"
+  /organisation/gst_accounts:
+    $ref: "./paths_organisation.yaml#/organisation_gst_accounts"
+  /organisation/gst_accounts/codes:
+    $ref: "./paths_organisation.yaml#/organisation_gst_accounts_codes"
+  /organisation/check_registration:
+    $ref: "./paths_organisation.yaml#/organisation_registration"
+  /organisation/check/{orgname}:
+    $ref: "./paths_organisation.yaml#/organisation_orgname"
+  /organisation/remove-user:
+    $ref: "./paths_organisation.yaml#/organisation_rm_user"
+
+  # gkuser
+  /gkuser:
+    $ref: "./paths_gkuser.yaml#/gkuser"
+  /organisation/gkusers:
+    $ref: "./paths_gkuser.yaml#/organisation_gkusers"
+  /gkuser/orgs:
+    $ref: "./paths_gkuser.yaml#/gkuser_orgs"
+  /gkuser/pwd/question:
+    $ref: "./paths_gkuser.yaml#/gkuser_pwd_question"
+  /gkuser/pwd/answer:
+    $ref: "./paths_gkuser.yaml#/gkuser_pwd_answer"
+  /gkuser/pwd/reset:
+    $ref: "./paths_gkuser.yaml#/gkuser_pwd_reset"
+  /gkuser/pwd/change:
+    $ref: "./paths_gkuser.yaml#/gkuser_pwd_change"
+  /gkuser/check/{username}:
+    $ref: "./paths_gkuser.yaml#/gkuser_username"
+  # invite
+  /invite:
+    $ref: "./paths_invite.yaml#/invite"
+  /invite/accept:
+    $ref: "./paths_invite.yaml#/invite_accept"
+  /invite/reject:
+    $ref: "./paths_invite.yaml#/invite_reject"
+
+  # login
+  /login/user:
+    $ref: "./paths_login.yaml#/login_user"
+  /login/org:
+    $ref: "./paths_login.yaml#/login_org"
+
+  # product (Product & Service)
+  /product:
+    $ref: "./paths_product.yaml#/product"
+  /product/tax:
+    $ref: "./paths_product.yaml#/product_tax"
+  /product/{productcode}:
+    $ref: "./paths_product.yaml#/product_productcode"
+  /product/check/gst:
+    $ref: "./paths_product.yaml#/product_check_gst"
+  /product/hsn:
+    $ref: "./paths_product.yaml#/product_hsn"
+  /product/stock:
+    $ref: "./paths_product.yaml#/product_stock"
+  /product/lastprice:
+    $ref: "./paths_product.yaml#/product_lastprice"
+  /godown/product/{productcode}:
+    $ref: "./paths_product.yaml#/godown_product"
+  /product/godown/{godownid}:
+    $ref: "./paths_product.yaml#/product_godown"
+  /product/category/{categorycode}:
+    $ref: "./paths_product.yaml#/product_category"
+
+  # tax
+  /tax:
+    $ref: "./paths_tax.yaml#/tax"
+  /tax/search/{pscflag}:
+    $ref: "./paths_tax.yaml#/tax_search"
+  /tax/{taxid}:
+    $ref: "./paths_tax.yaml#/tax_taxid"
+
+  # customer (Customer & Supplier)
+  /customer:
+    $ref: "./paths_customer.yaml#/customer"
+  /customer/search/account/{accountcode}:
+    $ref: "./paths_customer.yaml#/customer_search_by_account"
+  /customer/search/name/{custname}:
+    $ref: "./paths_customer.yaml#/customer_search_by_name"
+  /customer/{custid}:
+    $ref: "./paths_customer.yaml#/customer_custid"
+
+  # invoice
+  /invoice:
+    $ref: "./paths_invoice.yaml#/invoice"
+  /invoice/list:
+    $ref: "./paths_invoice.yaml#/invoice_list"
+  /invoice/list/rectify:
+    $ref: "./paths_invoice.yaml#/invoice_list_rectify"
+  /invoice/nonrejected:
+    $ref: "./paths_invoice.yaml#/invoice_nonrejected"
+  /invoice/{invid}:
+    $ref: "./paths_invoice.yaml#/invoice_invid"
+  /invoice/cancel/{invid}:
+    $ref: "./paths_invoice.yaml#/invoice_cancel"
+  /invoice/next_id:
+    $ref: "./paths_invoice.yaml#/invoice_id"
+  /cashmemo:
+    $ref: "./paths_invoice.yaml#/cashmemo"
+  /invoice/attachment/{invid}:
+    $ref: "./paths_invoice.yaml#/invoice_attachment"
+  /invoice/drcr/{invid}:
+    $ref: "./paths_invoice.yaml#/invoice_crdrid"
+  /invoice/rnid/{invid}:
+    $ref: "./paths_invoice.yaml#/invoice_rnid"
+
+
+  # delchal
+  /delchal:
+    $ref: "./paths_delchal.yaml#/delchal"
+  /delchal/attachment/{dcid}:
+    $ref: "./paths_delchal.yaml#/delchal_attachment"
+  /delchal/cancel:
+    $ref: "./paths_delchal.yaml#/delchal_cancel"
+  /delchal/last:
+    $ref: "./paths_delchal.yaml#/delchal_last"
+  /delchal/next_id:
+    $ref: "./paths_delchal.yaml#/delchal_next_id"
+  /delchal/{dcid}:
+    $ref: "./paths_delchal.yaml#/delchal_dcid"
+  /delchal/cancel/{dcid}:
+    $ref: "./paths_delchal.yaml#/delchal_cancel_dcid"
+  /delchal/invid/{dcid}:
+    $ref: "./paths_delchal.yaml#/delchal_invid"
+
+
+  # transaction
+  /transaction:
+    $ref: "./paths_transaction.yaml#/transaction"
+
+
+  # logs
+  /log:
+    $ref: "./logs/log.yaml"
+  /log/dateRange:
+    $ref: "./logs/dateRange.yaml"
+  # import / export
+  /export/json:
+    $ref: "./data/export-json.yaml"
+  /import/organisation:
+    $ref: "./data/import-json.yaml"
+  /import/overwrite-organisation:
+    $ref: "./data/import-json.yaml"
+  /export/xlsx:
+    $ref: "./data/export-xlsx.yaml"
+  /import/xlsx:
+    $ref: "./data/import-xlsx.yaml"
+  # accounts
+  /accounts:
+    $ref: "./accounts/index.yaml"
+  /accounts/spreadsheet:
+    $ref: "./accounts/spreadsheet.yaml"
+  # close books / roll over
+  /closebooks:
+    $ref: "./rollclose/closebooks.yaml"
+  /rollover:
+    $ref: "./rollclose/rollover.yaml"
+  # reports
+  /reports/product-register:
+    $ref: "./paths_reports.yaml#/product_register"
+  /reports/registers:
+    $ref: "./paths_reports.yaml#/view_registers"
+  /reports/profit-loss:
+    $ref: "./paths_reports.yaml#/profit_loss"
+  /reports/balance-sheet:
+    $ref: "./paths_reports.yaml#/balance_sheet"
+  /reports/trial-balance/gross:
+    $ref: "./paths_reports.yaml#/gross_trial_balance"
+  /reports/trial-balance/net:
+    $ref: "./paths_reports.yaml#/net_trial_balance"
+  /reports/trial-balance/extended:
+    $ref: "./paths_reports.yaml#/ext_trial_balance"
+  /reports/ledger:
+    $ref: "./paths_reports.yaml#/ledger"
+  /reports/ledger/monthly:
+    $ref: "./paths_reports.yaml#/ledger_monthly"
+  /reports/ledger/crdr:
+    $ref: "./paths_reports.yaml#/ledger_drcr"
+  # spreadsheets
+  /spreadsheet/product-register:
+    $ref: "./paths_spreadsheets.yaml#/product_register"
+  /spreadsheet/profit-loss:
+    $ref: "./paths_spreadsheets.yaml#/profit_loss"
+  /spreadsheet/balance-sheet:
+    $ref: "./paths_spreadsheets.yaml#/balance_sheet"
+  /spreadsheet/trial-balance:
+    $ref: "./paths_spreadsheets.yaml#/trial_balance"
+  /spreadsheet/ledger:
+    $ref: "./paths_spreadsheets.yaml#/ledger"
+  /spreadsheet/ledger/monthly:
+    $ref: "./paths_spreadsheets.yaml#/ledger_monthly"
+
+  # unit of measurement
+  /unitofmeasurement:
+    $ref: "./paths_uom.yaml#/uom"
+  /unitofmeasurement/{uomid}:
+    $ref: "./paths_uom.yaml#/uom_single"
+
+  # GST
+  /gst/returns/3b:
+    $ref: "./paths_gst.yaml#/GSTR-3B"
+  /gst/returns/r1:
+    $ref: "./paths_gst.yaml#/GSTR-1"

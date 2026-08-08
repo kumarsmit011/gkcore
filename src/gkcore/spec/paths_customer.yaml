@@ -1,0 +1,189 @@
+customer:
+  get:
+    tags: ["Customer & Supplier"]
+    summary: Fetch all customer / suppliers belonging to an organisation
+    operationId: getAllCustomers
+    parameters:
+      - in: query
+        name: qty
+        schema:
+          type: string
+          enum: ["custall", "supall"]
+        required: true
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      custid:
+                        type: integer
+                      custname:
+                        type: string
+  post:
+    tags: ["Customer & Supplier"]
+    summary: Create a new Customer / Supplier
+    operationId: addCustomerSupplier
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - $ref: "./customer/schemas_customer.yaml#/customerDetails"
+              - $ref: "./customer/schemas_customer.yaml#/bankDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    custid:
+                      type: integer
+                  description: id of the customer / supplier created will be returned on success
+
+customer_custid:
+  get:
+    tags: ["Customer & Supplier"]
+    summary: Get a Customer's / Supplier's data
+    operationId: getCustomerSupplier
+    parameters:
+      - $ref: "./customer/params_customer.yaml#/custid"
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  allOf:
+                    - type: object
+                      properties:
+                        custid:
+                          type: integer
+                        custdoc:
+                          type: object
+                    - $ref: "./customer/schemas_customer.yaml#/customerDetails"
+                    - $ref: "./customer/schemas_customer.yaml#/bankDetails"
+  put:
+    tags: ["Customer & Supplier"]
+    summary: Edit a Customer's / Supplier's data
+    operationId: editCustomerSupplier
+    parameters:
+      - $ref: "./customer/params_customer.yaml#/custid"
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                properties:
+                  custid:
+                    type: integer
+                  custdoc:
+                    type: object
+              - $ref: "./customer/schemas_customer.yaml#/customerDetails"
+              - $ref: "./customer/schemas_customer.yaml#/bankDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+  delete:
+    tags: ["Customer & Supplier"]
+    summary: Delete a Customer / Supplier
+    operationId: deleteCustomer
+    parameters:
+      - $ref: "./customer/params_customer.yaml#/custid"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+customer_search_by_account:
+  get:
+    tags: ["Customer & Supplier"]
+    summary: Fetch the customer id given an account code
+    operationId: getCustomerSupplierByAccount
+    parameters:
+      - in: path
+        name: accountcode
+        required: true
+        schema:
+          type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: number
+                  description: Customer ID
+
+customer_search_by_name:
+  get:
+    tags: ["Customer & Supplier"]
+    summary: Fetch the customer / supplier data given their name
+    operationId: getCustSupByName
+    parameters:
+      - in: path
+        name: custname
+        required: true
+        schema:
+          type: string
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              allOf:
+                - type: object
+                  properties:
+                    custid:
+                      type: integer
+                    custdoc:
+                      type: object
+                - $ref: "./customer/schemas_customer.yaml#/customerDetails"
+                - $ref: "./customer/schemas_customer.yaml#/bankDetails"

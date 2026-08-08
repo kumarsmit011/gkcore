@@ -1,0 +1,29 @@
+get:
+  tags: ["Close Books / Roll Over"]
+  summary: Roll over the org to new financial year
+  description: "Note that the `financialstart` & `financialend` should be different from the FY of the current org"
+  parameters:
+    - in: query
+      name: financialstart
+      required: true
+      description: "Financial year start (yyyy-mm-dd)"
+      schema:
+        type: string
+        format: date
+    - in: query
+      name: financialend
+      required: true
+      description: "financial year end (yyyy-mm-dd)"
+      schema:
+        type: string
+        format: date
+  responses:
+    "200":
+      description: OK
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              gkstatus:
+                type: integer

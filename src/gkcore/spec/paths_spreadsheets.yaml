@@ -1,0 +1,149 @@
+ledger_monthly:
+  get:
+    tags: ["Spreadsheets"]
+    summary: Export Monthly Ledger data into Spreadsheet(.xlsx) format
+    parameters:
+      - $ref: "./global/params.yaml#/accountcode"
+      - $ref: "./global/params.yaml#/accname"
+      - $ref: "./global/params.yaml#/orgname"
+      - $ref: "./global/params.yaml#/orgtype"
+      - $ref: "./global/params.yaml#/fystart"
+      - $ref: "./global/params.yaml#/fyend"
+    responses:
+      "200":
+        $ref: "./global/responses.yaml#/reports_xlsx"
+ledger:
+  get:
+    tags: ["Spreadsheets"]
+    summary: Export Ledger data into Spreadsheet(.xlsx) format
+    parameters:
+      - $ref: "./global/params.yaml#/accountcode"
+      - $ref: "./global/params.yaml#/projectcode"
+      - $ref: "./global/params.yaml#/calculateto"
+      - $ref: "./global/params.yaml#/orgname"
+      - $ref: "./global/params.yaml#/orgtype"
+      - $ref: "./global/params.yaml#/fystart"
+      - $ref: "./global/params.yaml#/fyend"
+      - $ref: "./global/params.yaml#/from"
+      - $ref: "./global/params.yaml#/to"
+    responses:
+      "200":
+        $ref: "./global/responses.yaml#/reports_xlsx"
+
+trial_balance:
+  get:
+    tags: ["Spreadsheets"]
+    summary: Export trial balance data into Spreadsheet(.xlsx) format
+    parameters:
+      - in: query
+        name: trialbalancetype
+        schema:
+          type: integer
+          enum: [1, 2, 3]
+        required: true
+        description: "Type: `1` - Net | `2` - Gross | `3` - Extended"
+      - $ref: "./global/params.yaml#/calculateto"
+      - $ref: "./global/params.yaml#/orgname"
+      - $ref: "./global/params.yaml#/orgtype"
+      - $ref: "./global/params.yaml#/fystart"
+      - $ref: "./global/params.yaml#/fyend"
+    responses:
+      "200":
+        $ref: "./global/responses.yaml#/reports_xlsx"
+
+balance_sheet:
+  get:
+    tags: ["Spreadsheets"]
+    summary: Export profit/loss data into Spreadsheet(.xlsx) format
+    parameters:
+      - in: query
+        name: baltype
+        schema:
+          type: integer
+          enum: [1]
+        required: true
+      - $ref: "./global/params.yaml#/calculatefrom"
+      - $ref: "./global/params.yaml#/calculateto"
+      - $ref: "./global/params.yaml#/orgname"
+      - $ref: "./global/params.yaml#/orgtype"
+      - $ref: "./global/params.yaml#/fystart"
+      - $ref: "./global/params.yaml#/fyend"
+    responses:
+      "200":
+        $ref: "./global/responses.yaml#/reports_xlsx"
+
+profit_loss:
+  get:
+    tags: ["Spreadsheets"]
+    summary: Export profit/loss data into Spreadsheet(.xlsx) format
+    parameters:
+      - $ref: "./global/params.yaml#/from"
+      - $ref: "./global/params.yaml#/to"
+      - $ref: "./global/params.yaml#/orgname"
+      - $ref: "./global/params.yaml#/orgtype"
+      - $ref: "./global/params.yaml#/fystart"
+      - $ref: "./global/params.yaml#/fyend"
+    responses:
+      "200":
+        $ref: "./global/responses.yaml#/reports_xlsx"
+
+product_register:
+  get:
+    tags: ["Spreadsheets"]
+    summary: Export product register data into Spreadsheet(.xlsx) format
+    parameters:
+      - in: query
+        name: calculatefrom
+        required: true
+        description: Start date (DD-MM-YYYY)
+        schema:
+          type: string
+      - in: query
+        name: calculateto
+        description: End date (DD-MM-YYYY)
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: productcode
+        description: Product Code
+        required: true
+        schema:
+          type: integer
+      - in: query
+        name: productdesc
+        description: Product description
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: godownflag
+        description: godown flag
+        required: true
+        schema:
+          type: integer
+      - in: query
+        name: goid
+        description: godown id
+        required: true
+        schema:
+          type: integer
+      - in: query
+        name: goname
+        description: godown name
+        required: true
+        schema:
+          type: string
+      - in: query
+        name: goaddr
+        description: godown address
+        required: true
+        schema:
+          type: string
+      - $ref: "./global/params.yaml#/orgname"
+      - $ref: "./global/params.yaml#/orgtype"
+      - $ref: "./global/params.yaml#/fystart"
+      - $ref: "./global/params.yaml#/fyend"
+    responses:
+      "200":
+        $ref: "./global/responses.yaml#/reports_xlsx"

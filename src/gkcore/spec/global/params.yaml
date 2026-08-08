@@ -1,0 +1,93 @@
+fystart:
+  in: query
+  name: fystart
+  required: true
+  description: "Financial Year Start (DD-MM-YYYY)"
+  schema:
+    type: string
+
+fyend:
+  in: query
+  name: fyend
+  required: true
+  description: "Financial Year End (DD-MM-YYYY)"
+  schema:
+    type: string
+
+orgname:
+  in: query
+  name: orgname
+  required: true
+  description: "name of the organisation"
+  schema:
+    type: string
+
+orgtype:
+  in: query
+  name: orgtype
+  required: true
+  description: "Type of organisation"
+  schema:
+    type: string
+    enum: [Profit Making, Non Profit]
+
+from:
+  in: query
+  name: from
+  required: true
+  description: "YYYY-MM-DD"
+  schema:
+    type: string
+    format: date
+
+to:
+  in: query
+  name: to
+  required: true
+  description: "YYYY-MM-DD"
+  schema:
+    type: string
+    format: date
+
+calculatefrom:
+  in: query
+  name: calculatefrom
+  required: true
+  description: "YYYY-MM-DD"
+  schema:
+    type: string
+    format: date
+
+calculateto:
+  in: query
+  name: calculateto
+  required: true
+  description: "YYYY-MM-DD"
+  schema:
+    type: string
+    format: date
+
+accountcode:
+  in: query
+  name: accountcode
+  required: true
+  schema:
+    type: integer
+  description: "Account Code"
+
+accname:
+  in: query
+  name: accname
+  required: true
+  schema:
+    type: string
+  description: "Account name"
+
+projectcode:
+  in: query
+  name: projectcode
+  description: "project code (Select Below Checkbox For Empty Value)"
+  required: true
+  schema:
+    type: integer
+  allowEmptyValue: true 

@@ -1,0 +1,26 @@
+post:
+  tags: ["Import / Export Data"]
+  summary: Import an organisation's data from spreadsheet (.xlsx) file.
+  description: user with `admin` role can import the data
+  requestBody:
+    content:
+      multipart/form-data:
+        schema:
+          type: object
+          properties:
+            gkfile:
+              type: string
+              format: binary
+          required:
+            - gkfile
+
+  responses:
+    200:
+      description: ok
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              gkstatus:
+                type: integer

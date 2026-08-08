@@ -1,0 +1,18 @@
+taxDetails:
+  type: object
+  additionalProperties: false
+  required: [taxname, productcode]
+  properties:
+    taxname:
+      type: string
+    taxrate:
+      type: number
+    productcode:
+      type: integer
+    categorycode:
+      type: integer
+    taxfromdate:
+      type: string
+      format: date
+    state:
+      type: string

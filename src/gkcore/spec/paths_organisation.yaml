@@ -1,0 +1,288 @@
+organisation:
+  get:
+    tags: ["Organisation"]
+    summary: Fetch an organisation's data
+    operationId: getOrg
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkdata:
+                  allOf:
+                    - type: object
+                      properties:
+                        orgcode:
+                          type: integer
+                    - $ref: "./organisation/schemas_org.yaml#/orgDetails"
+  post:
+    tags: ["Organisation"]
+    summary: Create a new organisation
+    operationId: postOrg
+    security:
+      - UserAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [orgdetails]
+            properties:
+              orgdetails:
+                $ref: "./organisation/schemas_org.yaml#/orgDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                token:
+                  $ref: "./global/schemas.yaml#/token"
+                  description: JWT token used to authenticate a user in GNUKhata
+                orgcode:
+                  type: integer
+                  description: An integer denoting the id of the organisation
+
+  put:
+    tags: ["Organisation"]
+    summary: Edit an organisation's data
+    operationId: putOrg
+    requestBody:
+      content:
+        application/json:
+          schema:
+            allOf:
+              - type: object
+                required: [orgcode]
+                properties:
+                  orgcode:
+                    type: integer
+              - $ref: "./organisation/schemas_org.yaml#/orgDetails"
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+  delete:
+    tags: ["Organisation"]
+    summary: Delete an organisation
+    operationId: deleteOrg
+    responses:
+      200:
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+organisation_all:
+  get:
+    tags: ["Organisation"]
+    summary: Fetch a list of organisations in the DB
+    operationId: getOrgs
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkdata:
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      orgname:
+                        type: string
+                      orgtype:
+                        $ref: "./organisation/schemas_org.yaml#/orgType"
+
+organisation_gstin:
+  get:
+    tags: ["Organisation"] # , "gstin"
+    summary: Fetch an organisation's Gstin
+    operationId: gstGstin
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                gkresult:
+                  type: object
+                  properties:
+                    gstin:
+                      type: string
+                    stateCode:
+                      $ref: "./global/schemas.yaml#/stateCode"
+
+organisation_attachment:
+  get:
+    tags: ["Organisation"]
+    summary: Fetch an organisation's logo
+    operationId: getattachment
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                logo:
+                  type: string
+                  format: byte
+              example:
+                gkstatus: 0
+                logo: "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"
+
+organisation_gst_accounts:
+  get:
+    tags: ["Organisation"] # , "GST", "Accounts", "Current Liabilities"
+    summary: Get all accounts of group 'Current Liabilities' and subgroup 'Duties & Taxes' created for GST.
+    operationId: getGSTGaccounts
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                accounts:
+                  type: array
+                  items:
+                    type: string
+
+organisation_gst_accounts_codes:
+  get:
+    tags: ["Organisation"] # "GST", "Account Codes", "Duties & Taxes", "Current Liabilities",
+    summary: Get groupcode of group 'Current Liabilities' and subgroup 'Duties & Taxes'
+    operationId: getGSTGroupCode
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+                subgroupcode:
+                  type: integer
+                groupcode:
+                  type: integer
+
+organisation_registration:
+  get:
+    tags: ["Organisation"]
+    summary: Check if the user is free to create new users / organisations
+    operationId: checkRegistrationStatus
+    security:
+      - UserAuth: []
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+organisation_orgname:
+  get:
+    tags: ["Organisation"]
+    summary: Check if an organisation's name is unique
+    operationId: orgNameExists
+    security:
+      - UserAuth: []
+    parameters:
+      - in: path
+        name: orgname
+        schema:
+          type: string
+        required: true
+        description: Organisation name to be checked if unique
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"
+
+organisation_rm_user:
+  delete:
+    tags: ["Organisation"]
+    summary: Remove an user from the organisation
+    description: Only a user with admin role can remove another user
+    security:
+      - ApiKeyAuth: []
+      - UserAuth: []
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            required: [userid]
+            description: the user id which is to be removed
+            properties:
+              userid:
+                type: integer
+    responses:
+      "200":
+        description: ok
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [gkstatus]
+              properties:
+                gkstatus:
+                  $ref: "./global/schemas.yaml#/gkstatus"

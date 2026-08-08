@@ -1,0 +1,6 @@
+reports_xlsx:
+  description: Response with .xlsx file payload
+  content:
+    application/vnd.openxmlformats-officedocument.spreadsheetml.sheet:
+      schema:
+        format: binary

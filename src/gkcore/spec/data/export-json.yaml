@@ -1,0 +1,10 @@
+get:
+  tags: ["Import / Export Data"]
+  summary: Export organisation's data into json format
+  responses:
+    "200":
+      description: Response with a .json file payload
+      content:
+        application/json:
+          schema:
+            format: binary
